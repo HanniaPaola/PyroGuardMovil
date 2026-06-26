@@ -1,0 +1,79 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'api_constants.dart';
+import 'api_exception.dart';
+
+/// Cliente HTTP delgado y reutilizable. Centraliza la construcción de
+/// requests para que los datasources de cualquier feature no dupliquen
+/// lógica de bajo nivel (headers, manejo de errores, baseUrl, etc.).
+class ApiClient {
+  final http.Client _httpClient;
+
+  ApiClient({http.Client? httpClient})
+    : _httpClient = httpClient ?? http.Client();
+
+  Uri _buildUri(String path) => Uri.parse('${ApiConstants.baseUrl}$path');
+
+  /// POST con body application/x-www-form-urlencoded.
+  /// Usado por endpoints tipo OAuth2PasswordRequestForm (ej. login).
+  Future<Map<String, dynamic>> postForm(
+    String path,
+    Map<String, String> formFields,
+  ) async {
+    try {
+      final response = await _httpClient.post(
+        _buildUri(path),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: formFields,
+      );
+
+      return _handleResponse(response);
+    } on http.ClientException {
+      throw ApiException(
+        'No se pudo conectar al servidor. Verifica tu conexión.',
+      );
+    }
+  }
+
+  /// POST con body application/json. Disponible para otros endpoints
+  /// del feature que sí esperen JSON.
+  Future<Map<String, dynamic>> postJson(
+    String path,
+    Map<String, dynamic> body, {
+    String? bearerToken,
+  }) async {
+    try {
+      final response = await _httpClient.post(
+        _buildUri(path),
+        headers: {
+          'Content-Type': 'application/json',
+          if (bearerToken != null) 'Authorization': 'Bearer $bearerToken',
+        },
+        body: jsonEncode(body),
+      );
+
+      return _handleResponse(response);
+    } on http.ClientException {
+      throw ApiException(
+        'No se pudo conectar al servidor. Verifica tu conexión.',
+      );
+    }
+  }
+
+  Map<String, dynamic> _handleResponse(http.Response response) {
+    final isSuccess = response.statusCode >= 200 && response.statusCode < 300;
+
+    if (!isSuccess) {
+      throw ApiException.fromStatusCode(response.statusCode, response.body);
+    }
+
+    if (response.body.isEmpty) return {};
+
+    final decoded = jsonDecode(response.body);
+    if (decoded is Map<String, dynamic>) return decoded;
+
+    throw ApiException('Respuesta inesperada del servidor.');
+  }
+
+  void dispose() => _httpClient.close();
+}
