@@ -16,7 +16,7 @@ class OfflineBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.bark,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.textMuted.withOpacity(0.4)),
+        border: Border.all(color: AppColors.textMuted.withValues(alpha: 0.4)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

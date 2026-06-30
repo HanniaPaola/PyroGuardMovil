@@ -14,11 +14,21 @@ class CitizenReportRemoteDataSource {
     required double longitude,
     String? photoUrl,
   }) async {
+    String? finalPhotoUrl = photoUrl;
+    if (photoUrl != null && !photoUrl.startsWith('http') && !photoUrl.startsWith('data:')) {
+      final uploadRes = await apiClient.postMultipart(
+        ApiConstants.uploadFile,
+        'file',
+        photoUrl,
+      );
+      finalPhotoUrl = 'https://pyroguard.inode.cloud${uploadRes['url']}';
+    }
+
     final draft = CitizenReportModel(
       description: description,
       latitude: latitude,
       longitude: longitude,
-      photoUrl: photoUrl,
+      photoUrl: finalPhotoUrl,
     );
 
     final response = await apiClient.postJson(
@@ -28,4 +38,5 @@ class CitizenReportRemoteDataSource {
 
     return CitizenReportModel.fromJson(response);
   }
+
 }

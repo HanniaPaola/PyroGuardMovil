@@ -58,7 +58,7 @@ class TechnicalDirectiveScreen extends StatelessWidget {
               color: AppColors.ash,
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: AppColors.riskColor(zone.riskLevel).withOpacity(0.3),
+                color: AppColors.riskColor(zone.riskLevel).withValues(alpha: 0.3),
               ),
             ),
             child: Column(
@@ -127,9 +127,9 @@ class TechnicalDirectiveScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: AppColors.fireMid.withOpacity(0.08),
+              color: AppColors.fireMid.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: AppColors.fireMid.withOpacity(0.25)),
+              border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.25)),
             ),
             child: const Row(
               children: [

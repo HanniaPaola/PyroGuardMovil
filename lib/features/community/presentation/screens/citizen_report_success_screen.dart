@@ -31,9 +31,9 @@ class CitizenReportSuccessScreen extends StatelessWidget {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.fireMid.withOpacity(0.12),
+                  color: AppColors.fireMid.withValues(alpha: 0.12),
                   border: Border.all(
-                    color: AppColors.fireMid.withOpacity(0.4),
+                    color: AppColors.fireMid.withValues(alpha: 0.4),
                     width: 2,
                   ),
                 ),
@@ -67,7 +67,7 @@ class CitizenReportSuccessScreen extends StatelessWidget {
                   color: AppColors.ash,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: AppColors.fireMid.withOpacity(0.12),
+                    color: AppColors.fireMid.withValues(alpha: 0.12),
                   ),
                 ),
                 child: Column(

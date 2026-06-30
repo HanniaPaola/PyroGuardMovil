@@ -16,5 +16,5 @@ class AlertHistory {
   });
 
   Duration? get duration =>
-      endDate != null ? endDate!.difference(startDate) : null;
+      endDate?.difference(startDate);
 }

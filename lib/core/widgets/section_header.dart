@@ -21,7 +21,7 @@ class SectionHeader extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
-            border: Border.all(color: AppColors.fireMid.withOpacity(0.5)),
+            border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.5)),
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text(

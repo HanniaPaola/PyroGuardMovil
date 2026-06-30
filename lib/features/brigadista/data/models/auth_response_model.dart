@@ -6,12 +6,14 @@ class AuthResponseModel extends AuthSession {
   const AuthResponseModel({
     required super.accessToken,
     required super.tokenType,
+    required super.role,
   });
 
   factory AuthResponseModel.fromJson(Map<String, dynamic> json) {
     return AuthResponseModel(
       accessToken: json['access_token'] as String,
       tokenType: json['token_type'] as String,
+      role: json['usuario']?['rol'] as String? ?? '',
     );
   }
 }

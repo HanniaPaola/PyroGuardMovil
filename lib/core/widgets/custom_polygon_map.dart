@@ -111,7 +111,7 @@ class _CustomPolygonMapState extends State<CustomPolygonMap> {
 
     return Polygon(
       points: points,
-      color: riskColor.withOpacity(0.4),
+      color: riskColor.withValues(alpha: 0.4),
       borderColor: riskColor,
       borderStrokeWidth: 2,
     );
@@ -126,7 +126,7 @@ class _CustomPolygonMapState extends State<CustomPolygonMap> {
       decoration: BoxDecoration(
         color: AppColors.ash,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.fireMid.withOpacity(0.2)),
+        border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.2)),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),

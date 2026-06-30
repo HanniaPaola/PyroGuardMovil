@@ -19,97 +19,127 @@ class ZoneMapScreen extends StatelessWidget {
         title: const Text('Mapa de Riesgo'),
         backgroundColor: AppColors.smoke,
       ),
-      body: Column(
-        children: [
-          // Placeholder mapa
-          const CustomPolygonMap(height: 280),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isLandscape = constraints.maxWidth > 600;
 
-          // Lista de zonas debajo del mapa
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-            child: Row(
+          if (isLandscape) {
+            return Row(
               children: [
-                const Text(
-                  'ZONAS',
-                  style: TextStyle(
-                    color: AppColors.fireMid,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1.2,
-                  ),
+                const Expanded(
+                  flex: 5,
+                  child: CustomPolygonMap(height: double.infinity),
                 ),
-                const Spacer(),
-                Text(
-                  'Toca una zona para detalles',
-                  style: const TextStyle(
-                    color: AppColors.textMuted,
-                    fontSize: 11,
+                Expanded(
+                  flex: 4,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 16),
+                      _buildHeader(),
+                      Expanded(child: _buildZonesList(provider)),
+                    ],
                   ),
                 ),
               ],
+            );
+          } else {
+            return Column(
+              children: [
+                const CustomPolygonMap(height: 280),
+                _buildHeader(),
+                Expanded(child: _buildZonesList(provider)),
+              ],
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+      child: Row(
+        children: const [
+          Text(
+            'ZONAS',
+            style: TextStyle(
+              color: AppColors.fireMid,
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.2,
             ),
           ),
-
-          Expanded(
-            child: provider.loadingZones
-                ? const Center(
-                    child: CircularProgressIndicator(color: AppColors.fireMid),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: provider.zones.length,
-                    itemBuilder: (context, i) {
-                      final z = provider.zones[i];
-                      return GestureDetector(
-                        onTap: () => _showZoneSheet(context, z),
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 8),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.ash,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: AppColors.fireMid.withOpacity(0.1),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      z.name,
-                                      style: const TextStyle(
-                                        color: AppColors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    Text(
-                                      z.municipality,
-                                      style: const TextStyle(
-                                        color: AppColors.textMuted,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    ZoneWeatherWidget(zoneId: z.id),
-                                  ],
-                                ),
-                              ),
-                              RiskBadge(level: z.riskLevel),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+          Spacer(),
+          Text(
+            'Toca una zona para detalles',
+            style: TextStyle(
+              color: AppColors.textMuted,
+              fontSize: 11,
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildZonesList(CommunityProvider provider) {
+    if (provider.loadingZones) {
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.fireMid),
+      );
+    }
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      itemCount: provider.zones.length,
+      itemBuilder: (context, i) {
+        final z = provider.zones[i];
+        return GestureDetector(
+          onTap: () => _showZoneSheet(context, z),
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.ash,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: AppColors.fireMid.withValues(alpha: 0.1),
+              ),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        z.name,
+                        style: const TextStyle(
+                          color: AppColors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        z.municipality,
+                        style: const TextStyle(
+                          color: AppColors.textMuted,
+                          fontSize: 12,
+                        ),
+                      ),
+                      ZoneWeatherWidget(zoneId: z.id),
+                    ],
+                  ),
+                ),
+                RiskBadge(level: z.riskLevel),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -192,35 +222,4 @@ class ZoneMapScreen extends StatelessWidget {
   }
 }
 
-class _LegendItem extends StatelessWidget {
-  final Color color;
-  final String label;
-  const _LegendItem({required this.color, required this.label});
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3),
-      child: Row(
-        children: [
-          Container(
-            width: 10,
-            height: 10,
-            decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(color: color.withOpacity(0.5), blurRadius: 4),
-              ],
-            ),
-          ),
-          const SizedBox(width: 6),
-          Text(
-            label,
-            style: const TextStyle(color: AppColors.cream, fontSize: 11),
-          ),
-        ],
-      ),
-    );
-  }
-}

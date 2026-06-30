@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/theme/app_theme.dart';
+import 'core/screens/splash_screen.dart';
 import 'features/community/di/community_module.dart';
-import 'features/community/presentation/screens/community_home_screen.dart';
 import 'features/brigadista/di/brigadista_module.dart';
 
 void main() {
@@ -29,7 +29,7 @@ class PyroGuardApp extends StatelessWidget {
         title: 'PyroGuard AI',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.dark,
-        home: const CommunityHomeScreen(),
+        home: const SplashScreen(),
       ),
     );
   }

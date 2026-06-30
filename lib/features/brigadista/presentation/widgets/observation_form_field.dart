@@ -23,12 +23,12 @@ class ObservationOptionChip extends StatelessWidget {
         duration: const Duration(milliseconds: 150),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
         decoration: BoxDecoration(
-          color: selected ? AppColors.fireMid.withOpacity(0.15) : AppColors.ash,
+          color: selected ? AppColors.fireMid.withValues(alpha: 0.15) : AppColors.ash,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: selected
                 ? AppColors.fireMid
-                : AppColors.textMuted.withOpacity(0.25),
+                : AppColors.textMuted.withValues(alpha: 0.25),
           ),
         ),
         child: Text(

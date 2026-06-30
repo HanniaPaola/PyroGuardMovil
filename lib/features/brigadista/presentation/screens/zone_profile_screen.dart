@@ -56,7 +56,7 @@ class _ZoneProfileScreenState extends State<ZoneProfileScreen> {
               border: Border.all(
                 color: AppColors.riskColor(
                   widget.zone.riskLevel,
-                ).withOpacity(0.3),
+                ).withValues(alpha: 0.3),
               ),
             ),
             child: Column(
@@ -103,7 +103,7 @@ class _ZoneProfileScreenState extends State<ZoneProfileScreen> {
             decoration: BoxDecoration(
               color: AppColors.ash,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.fireMid.withOpacity(0.12)),
+              border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.12)),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -76,93 +76,93 @@ class _RiskMapScreenState extends State<RiskMapScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          // Placeholder de mapa interactivo con GPS (criterio 1)
-          const CustomPolygonMap(height: 280),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isLandscape = constraints.maxWidth > 600;
 
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-            child: Row(
+          if (isLandscape) {
+            return Row(
               children: [
-                const Text(
-                  'ZONAS MONITOREADAS',
-                  style: TextStyle(
-                    color: AppColors.fireMid,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1.2,
-                  ),
+                const Expanded(
+                  flex: 5,
+                  child: CustomPolygonMap(height: double.infinity),
                 ),
-                const Spacer(),
-                Text(
-                  '${provider.zones.length} zonas',
-                  style: const TextStyle(
-                    color: AppColors.textMuted,
-                    fontSize: 11,
+                Expanded(
+                  flex: 4,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 16),
+                      _buildHeader(provider),
+                      Expanded(child: _buildZonesList(provider)),
+                    ],
                   ),
                 ),
               ],
-            ),
-          ),
-
-          Expanded(
-            child: provider.loadingZones
-                ? const Center(
-                    child: CircularProgressIndicator(color: AppColors.fireMid),
-                  )
-                : RefreshIndicator(
-                    color: AppColors.fireMid,
-                    backgroundColor: AppColors.ash,
-                    onRefresh: provider.loadZones,
-                    child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      itemCount: provider.zones.length,
-                      itemBuilder: (context, i) {
-                        final zone = provider.zones[i];
-                        return RiskZoneMapMarker(
-                          zone: zone,
-                          onTap: () => _openZoneSummary(context, zone),
-                        );
-                      },
-                    ),
-                  ),
-          ),
-        ],
+            );
+          } else {
+            return Column(
+              children: [
+                const CustomPolygonMap(height: 280),
+                _buildHeader(provider),
+                Expanded(child: _buildZonesList(provider)),
+              ],
+            );
+          }
+        },
       ),
     );
   }
-}
 
-class _LegendItem extends StatelessWidget {
-  final Color color;
-  final String label;
-  const _LegendItem({required this.color, required this.label});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildHeader(BrigadistaProvider provider) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
       child: Row(
         children: [
-          Container(
-            width: 10,
-            height: 10,
-            decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(color: color.withOpacity(0.5), blurRadius: 4),
-              ],
+          const Text(
+            'ZONAS MONITOREADAS',
+            style: TextStyle(
+              color: AppColors.fireMid,
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.2,
             ),
           ),
-          const SizedBox(width: 6),
+          const Spacer(),
           Text(
-            label,
-            style: const TextStyle(color: AppColors.cream, fontSize: 11),
+            '${provider.zones.length} zonas',
+            style: const TextStyle(
+              color: AppColors.textMuted,
+              fontSize: 11,
+            ),
           ),
         ],
       ),
     );
   }
+
+  Widget _buildZonesList(BrigadistaProvider provider) {
+    if (provider.loadingZones) {
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.fireMid),
+      );
+    }
+    return RefreshIndicator(
+      color: AppColors.fireMid,
+      backgroundColor: AppColors.ash,
+      onRefresh: provider.loadZones,
+      child: ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemCount: provider.zones.length,
+        itemBuilder: (context, i) {
+          final zone = provider.zones[i];
+          return RiskZoneMapMarker(
+            zone: zone,
+            onTap: () => _openZoneSummary(context, zone),
+          );
+        },
+      ),
+    );
+  }
 }
+
+

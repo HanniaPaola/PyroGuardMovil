@@ -45,7 +45,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
               border: Border.all(
                 color: AppColors.riskColor(
                   widget.zone.riskLevel,
-                ).withOpacity(0.3),
+                ).withValues(alpha: 0.3),
               ),
             ),
             child: Column(

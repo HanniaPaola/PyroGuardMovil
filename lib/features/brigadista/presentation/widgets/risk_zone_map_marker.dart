@@ -24,7 +24,7 @@ class RiskZoneMapMarker extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.ash,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color.withOpacity(0.25)),
+          border: Border.all(color: color.withValues(alpha: 0.25)),
         ),
         child: Row(
           children: [
@@ -35,7 +35,7 @@ class RiskZoneMapMarker extends StatelessWidget {
                 color: color,
                 shape: BoxShape.circle,
                 boxShadow: [
-                  BoxShadow(color: color.withOpacity(0.6), blurRadius: 6),
+                  BoxShadow(color: color.withValues(alpha: 0.6), blurRadius: 6),
                 ],
               ),
             ),

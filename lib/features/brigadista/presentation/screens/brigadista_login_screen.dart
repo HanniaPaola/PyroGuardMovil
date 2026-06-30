@@ -79,7 +79,7 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.fireMid.withOpacity(0.35),
+                          color: AppColors.fireMid.withValues(alpha: 0.35),
                           blurRadius: 24,
                           spreadRadius: 2,
                         ),
@@ -173,10 +173,10 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: AppColors.riskCritical.withOpacity(0.1),
+                        color: AppColors.riskCritical.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: AppColors.riskCritical.withOpacity(0.3),
+                          color: AppColors.riskCritical.withValues(alpha: 0.3),
                         ),
                       ),
                       child: Text(
@@ -213,8 +213,8 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
                       onPressed: authProvider.isLoading ? null : _handleLogin,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.fireMid,
-                        disabledBackgroundColor: AppColors.fireMid.withOpacity(
-                          0.5,
+                        disabledBackgroundColor: AppColors.fireMid.withValues(
+                          alpha: 0.5,
                         ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -246,7 +246,7 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
                     children: [
                       Expanded(
                         child: Divider(
-                          color: AppColors.textMuted.withOpacity(0.2),
+                          color: AppColors.textMuted.withValues(alpha: 0.2),
                         ),
                       ),
                       const Padding(
@@ -261,7 +261,7 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
                       ),
                       Expanded(
                         child: Divider(
-                          color: AppColors.textMuted.withOpacity(0.2),
+                          color: AppColors.textMuted.withValues(alpha: 0.2),
                         ),
                       ),
                     ],
@@ -290,11 +290,11 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
       contentPadding: const EdgeInsets.symmetric(vertical: 14),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: AppColors.textMuted.withOpacity(0.15)),
+        borderSide: BorderSide(color: AppColors.textMuted.withValues(alpha: 0.15)),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: AppColors.textMuted.withOpacity(0.15)),
+        borderSide: BorderSide(color: AppColors.textMuted.withValues(alpha: 0.15)),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),

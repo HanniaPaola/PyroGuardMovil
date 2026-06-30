@@ -19,7 +19,7 @@ class PhotoUrlPreview extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.ash,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.fireMid.withOpacity(0.15)),
+        border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.15)),
       ),
       clipBehavior: Clip.antiAlias,
       child: Image.network(

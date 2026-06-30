@@ -71,19 +71,35 @@ class _ZoneWeatherWidgetState extends State<ZoneWeatherWidget> {
 
     return Padding(
       padding: const EdgeInsets.only(top: 4.0),
-      child: Row(
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 4,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
-          const Icon(Icons.thermostat, size: 12, color: AppColors.fireGlow),
-          const SizedBox(width: 2),
-          Text(temp.toString(), style: const TextStyle(color: AppColors.cream, fontSize: 11)),
-          const SizedBox(width: 8),
-          const Icon(Icons.water_drop, size: 12, color: Colors.blueAccent),
-          const SizedBox(width: 2),
-          Text(hum.toString(), style: const TextStyle(color: AppColors.cream, fontSize: 11)),
-          const SizedBox(width: 8),
-          const Icon(Icons.air, size: 12, color: Colors.white70),
-          const SizedBox(width: 2),
-          Text(wind.toString(), style: const TextStyle(color: AppColors.cream, fontSize: 11)),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.thermostat, size: 12, color: AppColors.fireGlow),
+              const SizedBox(width: 2),
+              Text(temp.toString(), style: const TextStyle(color: AppColors.cream, fontSize: 11)),
+            ],
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.water_drop, size: 12, color: Colors.blueAccent),
+              const SizedBox(width: 2),
+              Text(hum.toString(), style: const TextStyle(color: AppColors.cream, fontSize: 11)),
+            ],
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.air, size: 12, color: Colors.white70),
+              const SizedBox(width: 2),
+              Text(wind.toString(), style: const TextStyle(color: AppColors.cream, fontSize: 11)),
+            ],
+          ),
         ],
       ),
     );

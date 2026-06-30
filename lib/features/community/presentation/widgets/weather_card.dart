@@ -14,7 +14,7 @@ class WeatherCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.ash,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.fireMid.withOpacity(0.15)),
+        border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.15)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +59,7 @@ class WeatherCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.smoke,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.fireCore.withOpacity(0.2)),
+              border: Border.all(color: AppColors.fireCore.withValues(alpha: 0.2)),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,

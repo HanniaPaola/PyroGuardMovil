@@ -20,7 +20,7 @@ class ZoneRiskCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.ash,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.fireMid.withOpacity(0.12)),
+          border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.12)),
         ),
         child: Column(
           children: [
@@ -32,7 +32,7 @@ class ZoneRiskCard extends StatelessWidget {
                   top: Radius.circular(12),
                 ),
                 boxShadow: [
-                  BoxShadow(color: color.withOpacity(0.5), blurRadius: 8),
+                  BoxShadow(color: color.withValues(alpha: 0.5), blurRadius: 8),
                 ],
               ),
             ),

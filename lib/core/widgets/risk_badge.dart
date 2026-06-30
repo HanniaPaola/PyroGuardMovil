@@ -18,9 +18,9 @@ class RiskBadge extends StatelessWidget {
         vertical: large ? 8 : 4,
       ),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
+        color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(large ? 8 : 4),
-        border: Border.all(color: color.withOpacity(0.5)),
+        border: Border.all(color: color.withValues(alpha: 0.5)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -32,7 +32,7 @@ class RiskBadge extends StatelessWidget {
               color: color,
               shape: BoxShape.circle,
               boxShadow: [
-                BoxShadow(color: color.withOpacity(0.6), blurRadius: 6),
+                BoxShadow(color: color.withValues(alpha: 0.6), blurRadius: 6),
               ],
             ),
           ),

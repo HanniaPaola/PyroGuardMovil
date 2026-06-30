@@ -9,4 +9,10 @@ class ApiConstants {
 
   // Ciudadano (community) — endpoints públicos, sin autenticación
   static const String citizenReports = '/v1/ciudadano/reportes';
+
+  // Subida de archivos
+  static const String uploadFile = '/v1/archivos/upload';
+
+  // Comunicados de la comunidad
+  static const String comunicados = '/v1/comunicados/activos';
 }

@@ -316,9 +316,9 @@ class _CitizenReportBanner extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.fireMid.withOpacity(0.1),
+          color: AppColors.fireMid.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.fireMid.withOpacity(0.3)),
+          border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.3)),
         ),
         child: Row(
           children: [
@@ -377,9 +377,9 @@ class _AlertBanner extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.35)),
+        border: Border.all(color: color.withValues(alpha: 0.35)),
       ),
       child: Row(
         children: [

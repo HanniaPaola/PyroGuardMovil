@@ -7,6 +7,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/section_header.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:geolocator/geolocator.dart';
 
 /// HU03: formulario de observación técnica en campo. Captura coordenadas
 /// GPS, texto libre y opciones predefinidas; soporta cola offline.
@@ -23,7 +24,6 @@ class _FieldObservationFormScreenState
   final _notesController = TextEditingController();
   final Set<String> _selectedOptions = {};
 
-  // TODO: Reemplazar por geolocator.getCurrentPosition() en integración real.
   double? _latitude;
   double? _longitude;
   bool _locatingGps = true;
@@ -75,14 +75,56 @@ class _FieldObservationFormScreenState
   }
 
   Future<void> _captureGpsLocation() async {
-    await Future.delayed(const Duration(milliseconds: 700));
-    if (!mounted) return;
-    setState(() {
-      // Coordenadas simuladas; sustituir con valor real del GPS.
-      _latitude = 16.789;
-      _longitude = -93.654;
-      _locatingGps = false;
-    });
+    setState(() => _locatingGps = true);
+    
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    try {
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        throw Exception('Servicios de ubicación desactivados.');
+      }
+
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          throw Exception('Permisos de ubicación denegados.');
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        throw Exception('Permisos permanentemente denegados.');
+      }
+
+      final position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
+      );
+      
+      if (!mounted) return;
+      setState(() {
+        _latitude = position.latitude;
+        _longitude = position.longitude;
+        _locatingGps = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _locatingGps = false;
+        // Coordenadas simuladas de respaldo
+        _latitude = 16.789;
+        _longitude = -93.654;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString().replaceAll('Exception: ', '')),
+          backgroundColor: AppColors.riskCritical,
+        ),
+      );
+    }
   }
 
   void _toggleOption(String option) {
@@ -177,7 +219,8 @@ class _FieldObservationFormScreenState
           _loadingZones
               ? const CircularProgressIndicator(color: AppColors.fireMid)
               : DropdownButtonFormField<String>(
-                  value: _selectedZoneId,
+                  isExpanded: true,
+                  initialValue: _selectedZoneId,
                   dropdownColor: AppColors.ash,
                   style: const TextStyle(color: AppColors.white),
                   decoration: InputDecoration(
@@ -191,7 +234,10 @@ class _FieldObservationFormScreenState
                   items: _zones.map((z) {
                     return DropdownMenuItem<String>(
                       value: z['id_zona'],
-                      child: Text(z['nombre'] ?? 'Desconocida'),
+                      child: Text(
+                        z['nombre'] ?? 'Desconocida',
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     );
                   }).toList(),
                   onChanged: (val) {
@@ -209,7 +255,7 @@ class _FieldObservationFormScreenState
             decoration: BoxDecoration(
               color: AppColors.ash,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.fireMid.withOpacity(0.12)),
+              border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.12)),
             ),
             child: Row(
               children: [
@@ -286,7 +332,7 @@ class _FieldObservationFormScreenState
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(
-                  color: AppColors.textMuted.withOpacity(0.15),
+                  color: AppColors.textMuted.withValues(alpha: 0.15),
                 ),
               ),
               focusedBorder: OutlineInputBorder(
@@ -308,7 +354,7 @@ class _FieldObservationFormScreenState
                   : _submit,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.fireMid,
-                disabledBackgroundColor: AppColors.fireMid.withOpacity(0.5),
+                disabledBackgroundColor: AppColors.fireMid.withValues(alpha: 0.5),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),

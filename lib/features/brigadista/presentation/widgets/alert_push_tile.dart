@@ -26,7 +26,7 @@ class AlertPushTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.ash,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.fireMid.withOpacity(0.12)),
+          border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.12)),
         ),
         child: Row(
           children: [
