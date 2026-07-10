@@ -4,6 +4,7 @@ import '../../domain/entities/risk_zone.dart';
 import '../../domain/entities/field_observation.dart';
 import '../../domain/entities/push_alert.dart';
 import '../../domain/entities/zone_intervention.dart';
+import '../../domain/entities/simple_zone.dart';
 import '../../domain/repositories/brigadista_repository.dart';
 import '../datasources/brigadista_remote_datasource.dart';
 import '../datasources/brigadista_local_datasource.dart';
@@ -25,6 +26,11 @@ class BrigadistaRepositoryImpl implements BrigadistaRepository {
     } catch (_) {
       return false;
     }
+  }
+
+  @override
+  Future<List<SimpleZone>> getSimpleZones() async {
+    return remote.fetchSimpleZones();
   }
 
   @override

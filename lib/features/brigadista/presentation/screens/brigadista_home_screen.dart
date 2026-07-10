@@ -4,6 +4,7 @@ import '../providers/brigadista_provider.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/section_header.dart';
 import '../../../../core/widgets/offline_badge.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../widgets/sync_status_banner.dart';
 import '../widgets/risk_zone_map_marker.dart';
 import 'risk_map_screen.dart';
@@ -11,6 +12,7 @@ import 'alert_history_screen.dart';
 import 'field_observation_form_screen.dart';
 import 'zone_profile_screen.dart';
 import 'technical_directive_screen.dart';
+
 
 /// Home del módulo Brigadista. Punto central tras el login, con acceso
 /// rápido a mapa de riesgo, formulario de campo e historial de alertas.
@@ -35,9 +37,9 @@ class _BrigadistaHomeScreenState extends State<BrigadistaHomeScreen> {
   @override
   Widget build(BuildContext context) {
     final screens = [
-      const _BrigadistaHomeTab(),
-      const RiskMapScreen(),
-      const AlertHistoryScreen(),
+      _BrigadistaHomeTab(),
+      RiskMapScreen(),
+      AlertHistoryScreen(),
     ];
 
     return Scaffold(
@@ -50,18 +52,18 @@ class _BrigadistaHomeScreenState extends State<BrigadistaHomeScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const FieldObservationFormScreen(),
+                    builder: (_) => FieldObservationFormScreen(),
                   ),
                 );
               },
-              child: const Icon(
+              child: Icon(
                 Icons.note_add_outlined,
                 color: AppColors.white,
               ),
             )
           : null,
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border(top: BorderSide(color: Color(0x1AFF6A00))),
         ),
         child: BottomNavigationBar(
@@ -71,12 +73,12 @@ class _BrigadistaHomeScreenState extends State<BrigadistaHomeScreen> {
           selectedItemColor: AppColors.fireGlow,
           unselectedItemColor: AppColors.textMuted,
           type: BottomNavigationBarType.fixed,
-          selectedLabelStyle: const TextStyle(
+          selectedLabelStyle: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w600,
           ),
-          unselectedLabelStyle: const TextStyle(fontSize: 11),
-          items: const [
+          unselectedLabelStyle: TextStyle(fontSize: 11),
+          items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.home_outlined),
               activeIcon: Icon(Icons.home),
@@ -111,13 +113,13 @@ class _BrigadistaHomeTab extends StatelessWidget {
 
     return SafeArea(
       child: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         children: [
           Row(
             children: [
-              const Text('🧑‍🚒', style: TextStyle(fontSize: 26)),
-              const SizedBox(width: 10),
-              const Expanded(
+              Text('🧑‍🚒', style: TextStyle(fontSize: 26)),
+              SizedBox(width: 10),
+              Expanded(
                 child: Text(
                   'Panel del Brigadista',
                   style: TextStyle(
@@ -127,32 +129,31 @@ class _BrigadistaHomeTab extends StatelessWidget {
                   ),
                 ),
               ),
+
               OfflineBadge(isOffline: provider.isOffline),
             ],
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
 
           SyncStatusBanner(
             isOffline: provider.isOffline,
             pendingCount: provider.pendingSyncCount,
           ),
 
-          const SectionHeader(
+          SectionHeader(
             tag: 'Zonas prioritarias',
             title: 'Atención inmediata',
             subtitle: 'Zonas con riesgo alto o crítico cerca de tu posición.',
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           if (provider.loadingZones)
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.all(40),
-                child: CircularProgressIndicator(color: AppColors.fireMid),
-              ),
+            Padding(
+              padding: EdgeInsets.only(top: 8),
+              child: SkeletonList(itemCount: 3, isCard: true),
             )
           else if (criticalZones.isEmpty)
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(vertical: 30),
               child: Center(
                 child: Text(
@@ -177,8 +178,8 @@ class _BrigadistaHomeTab extends StatelessWidget {
               ),
             ),
 
-          const SizedBox(height: 24),
-          const Text(
+          SizedBox(height: 24),
+          Text(
             'ACCESOS RÁPIDOS',
             style: TextStyle(
               color: AppColors.fireMid,
@@ -187,7 +188,7 @@ class _BrigadistaHomeTab extends StatelessWidget {
               letterSpacing: 1.2,
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Row(
             children: [
               Expanded(
@@ -196,11 +197,11 @@ class _BrigadistaHomeTab extends StatelessWidget {
                   label: 'Mapa de riesgo',
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const RiskMapScreen()),
+                    MaterialPageRoute(builder: (_) => RiskMapScreen()),
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: _QuickAction(
                   icon: Icons.fact_check_outlined,
@@ -208,14 +209,14 @@ class _BrigadistaHomeTab extends StatelessWidget {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const FieldObservationFormScreen(),
+                      builder: (_) => FieldObservationFormScreen(),
                     ),
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Row(
             children: [
               Expanded(
@@ -225,12 +226,12 @@ class _BrigadistaHomeTab extends StatelessWidget {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const AlertHistoryScreen(),
+                      builder: (_) => AlertHistoryScreen(),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: _QuickAction(
                   icon: Icons.assignment_outlined,
@@ -251,7 +252,7 @@ class _BrigadistaHomeTab extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
         ],
       ),
     );
@@ -274,7 +275,7 @@ class _QuickAction extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 14),
+        padding: EdgeInsets.symmetric(vertical: 18, horizontal: 14),
         decoration: BoxDecoration(
           color: AppColors.ash,
           borderRadius: BorderRadius.circular(12),
@@ -284,10 +285,10 @@ class _QuickAction extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(icon, color: AppColors.fireGlow, size: 22),
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.cream,
                 fontSize: 13,
                 fontWeight: FontWeight.w600,

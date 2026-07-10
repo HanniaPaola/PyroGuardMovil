@@ -7,6 +7,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/risk_badge.dart';
 import '../../../../core/widgets/offline_badge.dart';
 import '../../../../core/widgets/section_header.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 
 /// HU07: perfil de zona asignada, con historial de las últimas 5
 /// intervenciones y riesgo promedio histórico. Disponible offline
@@ -36,20 +37,20 @@ class _ZoneProfileScreenState extends State<ZoneProfileScreen> {
     return Scaffold(
       backgroundColor: AppColors.smoke,
       appBar: AppBar(
-        title: const Text('Perfil de Zona'),
+        title: Text('Perfil de Zona'),
         backgroundColor: AppColors.smoke,
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 16),
+            padding: EdgeInsets.only(right: 16),
             child: Center(child: OfflineBadge(isOffline: provider.isOffline)),
           ),
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         children: [
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: AppColors.ash,
               borderRadius: BorderRadius.circular(12),
@@ -67,7 +68,7 @@ class _ZoneProfileScreenState extends State<ZoneProfileScreen> {
                     Expanded(
                       child: Text(
                         widget.zone.name,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.white,
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
@@ -77,10 +78,10 @@ class _ZoneProfileScreenState extends State<ZoneProfileScreen> {
                     RiskBadge(level: widget.zone.riskLevel, large: true),
                   ],
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   widget.zone.municipality,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textMuted,
                     fontSize: 13,
                   ),
@@ -89,17 +90,17 @@ class _ZoneProfileScreenState extends State<ZoneProfileScreen> {
             ),
           ),
 
-          const SizedBox(height: 24),
-          const SectionHeader(
+          SizedBox(height: 24),
+          SectionHeader(
             tag: 'Contexto histórico',
             title: 'Riesgo promedio histórico',
             subtitle: 'Nivel de riesgo mensual registrado en esta zona.',
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
 
           // Riesgo promedio histórico simplificado (placeholder de gráfica)
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: AppColors.ash,
               borderRadius: BorderRadius.circular(12),
@@ -129,10 +130,10 @@ class _ZoneProfileScreenState extends State<ZoneProfileScreen> {
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6),
                     Text(
                       months[i],
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textMuted,
                         fontSize: 10,
                       ),
@@ -143,10 +144,10 @@ class _ZoneProfileScreenState extends State<ZoneProfileScreen> {
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           Row(
             children: [
-              const Text(
+              Text(
                 'ÚLTIMAS INTERVENCIONES',
                 style: TextStyle(
                   color: AppColors.fireMid,
@@ -155,27 +156,25 @@ class _ZoneProfileScreenState extends State<ZoneProfileScreen> {
                   letterSpacing: 1.2,
                 ),
               ),
-              const Spacer(),
+              Spacer(),
               Text(
                 '${interventions.length} de 5',
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.textMuted,
                   fontSize: 11,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
 
           if (provider.loadingInterventions)
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.all(30),
-                child: CircularProgressIndicator(color: AppColors.fireMid),
-              ),
+            Padding(
+              padding: EdgeInsets.only(top: 8),
+              child: SkeletonList(itemCount: 3, isCard: false),
             )
           else if (interventions.isEmpty)
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(vertical: 20),
               child: Center(
                 child: Text(
@@ -189,7 +188,7 @@ class _ZoneProfileScreenState extends State<ZoneProfileScreen> {
               (i) => InterventionHistoryTile(intervention: i),
             ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
         ],
       ),
     );

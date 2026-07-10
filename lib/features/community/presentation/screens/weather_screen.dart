@@ -5,6 +5,7 @@ import '../widgets/weather_card.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/risk_badge.dart';
 import '../../domain/entities/zone.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 
 class WeatherScreen extends StatefulWidget {
   final Zone zone;
@@ -38,7 +39,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
         children: [
           // Encabezado zona
           Container(
-            padding: const EdgeInsets.all(18),
+            padding: EdgeInsets.all(18),
             decoration: BoxDecoration(
               color: AppColors.ash,
               borderRadius: BorderRadius.circular(12),
@@ -56,7 +57,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     Expanded(
                       child: Text(
                         widget.zone.name,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.white,
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
@@ -66,17 +67,17 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     RiskBadge(level: widget.zone.riskLevel, large: true),
                   ],
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Text(
                   widget.zone.municipality,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textMuted,
                     fontSize: 13,
                   ),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: AppColors.smoke,
                     borderRadius: BorderRadius.circular(8),
@@ -88,7 +89,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                       Expanded(
                         child: Text(
                           widget.zone.recommendation,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.fireGlow,
                             fontSize: 13,
                             height: 1.5,
@@ -105,11 +106,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
           const SizedBox(height: 20),
 
           if (provider.loadingWeather)
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.all(40),
-                child: CircularProgressIndicator(color: AppColors.fireMid),
-              ),
+            Padding(
+              padding: EdgeInsets.only(top: 8),
+              child: SkeletonCard(height: 120),
             )
           else if (provider.weather != null)
             WeatherCard(weather: provider.weather!),

@@ -39,8 +39,8 @@ class CitizenReportSuccessScreen extends StatelessWidget {
                 ),
                 child: const Text('✅', style: TextStyle(fontSize: 40)),
               ),
-              const SizedBox(height: 24),
-              const Text(
+              SizedBox(height: 24),
+              Text(
                 'Reporte enviado',
                 style: TextStyle(
                   color: AppColors.white,
@@ -49,7 +49,7 @@ class CitizenReportSuccessScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
+              Text(
                 'Gracias por ayudar a proteger tu comunidad.\nNuestro equipo revisará tu reporte.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -62,7 +62,7 @@ class CitizenReportSuccessScreen extends StatelessWidget {
               const SizedBox(height: 28),
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: AppColors.ash,
                   borderRadius: BorderRadius.circular(12),
@@ -109,7 +109,7 @@ class CitizenReportSuccessScreen extends StatelessWidget {
                     ),
                     elevation: 0,
                   ),
-                  child: const Text(
+                  child: Text(
                     'Volver al inicio',
                     style: TextStyle(
                       color: AppColors.white,
@@ -141,13 +141,13 @@ class _DetailRow extends StatelessWidget {
           width: 110,
           child: Text(
             label,
-            style: const TextStyle(color: AppColors.textMuted, fontSize: 12),
+            style: TextStyle(color: AppColors.textMuted, fontSize: 12),
           ),
         ),
         Expanded(
           child: Text(
             value,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.cream,
               fontSize: 12,
               fontWeight: FontWeight.w600,

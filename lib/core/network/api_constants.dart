@@ -1,8 +1,10 @@
+import 'env.dart';
+
 /// Constantes de configuración de la API central de PyroGuard.
 /// Cualquier feature que consuma el backend referencia estas constantes
 /// en lugar de hardcodear URLs.
 class ApiConstants {
-  static const String baseUrl = 'https://pyroguard.inode.cloud/api';
+  static final String baseUrl = Env.baseUrl;
 
   // Auth (brigadista)
   static const String login = '/v1/auth/login';

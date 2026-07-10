@@ -1,13 +1,35 @@
 import 'dart:math';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/risk_zone_model.dart';
 import '../models/zone_intervention_model.dart';
+import '../models/risk_zone_model.dart';
+import '../../domain/entities/simple_zone.dart';
 import '../../../../core/services/token_storage_service.dart';
+import '../../../../core/network/api_client.dart';
 
 /// Fuente remota simulada. Reemplazar las implementaciones con llamadas
 /// reales (Dio/http) al backend central cuando esté disponible.
 class BrigadistaRemoteDataSource {
+  final ApiClient apiClient;
+
+  BrigadistaRemoteDataSource({required this.apiClient});
+
+  Future<List<SimpleZone>> fetchSimpleZones() async {
+    try {
+      final response = await http.get(Uri.parse('https://pyroguard.inode.cloud/ml/api/v1/zonas/simple'));
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        return data.map((z) => SimpleZone(
+          id: z['id_zona'] as String? ?? '',
+          name: z['nombre'] as String? ?? 'Desconocida',
+        )).toList();
+      }
+      return [];
+    } catch (e) {
+      return [];
+    }
+  }
+
   Future<List<RiskZoneModel>> fetchRiskZones() async {
     try {
       final responses = await Future.wait([
@@ -113,21 +135,14 @@ class BrigadistaRemoteDataSource {
     
     final tokenService = TokenStorageService();
     final token = await tokenService.getAccessToken();
-    final tokenType = await tokenService.getTokenType() ?? 'Bearer';
+    // ApiClient already appends 'Bearer ' when passing bearerToken
 
     try {
-      final response = await http.post(
-        Uri.parse('https://pyroguard.inode.cloud/api/v1/observaciones/'),
-        headers: {
-          'Content-Type': 'application/json',
-          if (token != null) 'Authorization': '$tokenType $token',
-        },
-        body: json.encode(payload),
-      ).timeout(const Duration(seconds: 10));
-      
-      if (response.statusCode != 200 && response.statusCode != 201) {
-        throw Exception('Failed to upload observation: ${response.statusCode} - ${response.body}');
-      }
+      await apiClient.postJson(
+        '/v1/observaciones/',
+        payload,
+        bearerToken: token,
+      );
     } catch (e) {
       throw Exception('Upload failed: $e');
     }

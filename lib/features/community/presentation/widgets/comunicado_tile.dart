@@ -10,8 +10,8 @@ class ComunicadoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
+      margin: EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppColors.ash,
         borderRadius: BorderRadius.circular(10),
@@ -25,29 +25,29 @@ class ComunicadoTile extends StatelessWidget {
               Expanded(
                 child: Text(
                   _formatDate(comunicado.publishDate),
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textMuted,
                     fontSize: 11,
                     letterSpacing: 0.3,
                   ),
                 ),
               ),
-              const Icon(Icons.campaign, size: 16, color: AppColors.fireGlow),
+              Icon(Icons.campaign, size: 16, color: AppColors.fireGlow),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
             comunicado.title,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.white,
               fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
             comunicado.content,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textDim,
               fontSize: 13,
             ),

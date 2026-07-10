@@ -16,8 +16,8 @@ class AlertHistoryTile extends StatelessWidget {
         : 'En curso';
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
+      margin: EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppColors.ash,
         borderRadius: BorderRadius.circular(10),
@@ -43,7 +43,7 @@ class AlertHistoryTile extends StatelessWidget {
                     Expanded(
                       child: Text(
                         _formatDate(alert.startDate),
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.textMuted,
                           fontSize: 11,
                           letterSpacing: 0.3,
@@ -53,10 +53,10 @@ class AlertHistoryTile extends StatelessWidget {
                     RiskBadge(level: alert.riskLevel),
                   ],
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   durationText,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textDim,
                     fontSize: 13,
                   ),
@@ -64,7 +64,7 @@ class AlertHistoryTile extends StatelessWidget {
                 if (alert.derivedToBrigade) ...[
                   const SizedBox(height: 4),
                   Row(
-                    children: const [
+                    children: [
                       Icon(
                         Icons.local_fire_department,
                         size: 12,

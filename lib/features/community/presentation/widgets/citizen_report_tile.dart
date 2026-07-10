@@ -10,8 +10,8 @@ class CitizenReportTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
+      margin: EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppColors.ash,
         borderRadius: BorderRadius.circular(10),
@@ -25,7 +25,7 @@ class CitizenReportTile extends StatelessWidget {
               Expanded(
                 child: Text(
                   report.createdAt != null ? _formatDate(report.createdAt!) : '',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textMuted,
                     fontSize: 11,
                     letterSpacing: 0.3,
@@ -50,10 +50,10 @@ class CitizenReportTile extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
             report.description,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textDim,
               fontSize: 13,
             ),

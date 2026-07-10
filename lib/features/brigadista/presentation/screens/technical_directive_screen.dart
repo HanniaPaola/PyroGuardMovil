@@ -15,18 +15,18 @@ class TechnicalDirectiveScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.smoke,
       appBar: AppBar(
-        title: const Text('Directiva Técnica'),
+        title: Text('Directiva Técnica'),
         backgroundColor: AppColors.smoke,
       ),
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         children: [
           Row(
             children: [
               Expanded(
                 child: Text(
                   zone.name,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
@@ -36,24 +36,24 @@ class TechnicalDirectiveScreen extends StatelessWidget {
               RiskBadge(level: zone.riskLevel, large: true),
             ],
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
             zone.municipality,
-            style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
+            style: TextStyle(color: AppColors.textMuted, fontSize: 13),
           ),
 
-          const SizedBox(height: 24),
-          const SectionHeader(
+          SizedBox(height: 24),
+          SectionHeader(
             tag: 'Generado por NLP',
             title: 'Protocolo de acción preventiva',
             subtitle:
                 'Recomendaciones técnicas basadas en normativas Conafor y el nivel de riesgo actual de la zona.',
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(18),
+            padding: EdgeInsets.all(18),
             decoration: BoxDecoration(
               color: AppColors.ash,
               borderRadius: BorderRadius.circular(14),
@@ -65,7 +65,7 @@ class TechnicalDirectiveScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  children: const [
+                  children: [
                     Text('📋', style: TextStyle(fontSize: 18)),
                     SizedBox(width: 8),
                     Text(
@@ -79,18 +79,18 @@ class TechnicalDirectiveScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
                 Text(
                   zone.technicalDirective,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.cream,
                     fontSize: 14,
                     height: 1.6,
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
                 Container(
-                  padding: const EdgeInsets.symmetric(
+                  padding: EdgeInsets.symmetric(
                     horizontal: 10,
                     vertical: 6,
                   ),
@@ -101,17 +101,17 @@ class TechnicalDirectiveScreen extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.update,
                         size: 13,
                         color: AppColors.textMuted,
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6),
                       Text(
                         'Última actualización: ${zone.lastUpdated.day.toString().padLeft(2, '0')}/'
                         '${zone.lastUpdated.month.toString().padLeft(2, '0')}/${zone.lastUpdated.year} '
                         '${zone.lastUpdated.hour.toString().padLeft(2, '0')}:${zone.lastUpdated.minute.toString().padLeft(2, '0')}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.textMuted,
                           fontSize: 11,
                         ),
@@ -123,15 +123,15 @@ class TechnicalDirectiveScreen extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Container(
-            padding: const EdgeInsets.all(14),
+            padding: EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: AppColors.fireMid.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.25)),
             ),
-            child: const Row(
+            child: Row(
               children: [
                 Icon(Icons.info_outline, size: 16, color: AppColors.fireGlow),
                 SizedBox(width: 10),
@@ -148,7 +148,7 @@ class TechnicalDirectiveScreen extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
         ],
       ),
     );

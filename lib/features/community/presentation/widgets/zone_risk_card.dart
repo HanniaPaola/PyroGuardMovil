@@ -16,7 +16,7 @@ class ZoneRiskCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
+        margin: EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
           color: AppColors.ash,
           borderRadius: BorderRadius.circular(12),
@@ -46,7 +46,7 @@ class ZoneRiskCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           zone.name,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.white,
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
@@ -56,18 +56,18 @@ class ZoneRiskCard extends StatelessWidget {
                       RiskBadge(level: zone.riskLevel),
                     ],
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   Text(
                     zone.municipality,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textMuted,
                       fontSize: 12,
                       letterSpacing: 0.3,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: AppColors.smoke,
                       borderRadius: BorderRadius.circular(8),
@@ -79,7 +79,7 @@ class ZoneRiskCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             zone.mainCause,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: AppColors.textDim,
                               fontSize: 13,
                               height: 1.4,
@@ -92,7 +92,7 @@ class ZoneRiskCard extends StatelessWidget {
                   const SizedBox(height: 10),
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.arrow_forward_ios,
                         size: 11,
                         color: AppColors.fireMid,
@@ -101,7 +101,7 @@ class ZoneRiskCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           zone.recommendation,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.fireGlow,
                             fontSize: 12,
                             height: 1.4,

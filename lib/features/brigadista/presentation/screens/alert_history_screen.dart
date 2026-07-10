@@ -5,6 +5,7 @@ import '../widgets/alert_push_tile.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/section_header.dart';
 import 'risk_map_screen.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 
 /// HU06: historial de alertas recibidas, ordenadas por fecha descendente,
 /// con persistencia local de al menos 30 días.
@@ -33,29 +34,27 @@ class _AlertHistoryScreenState extends State<AlertHistoryScreen> {
     return Scaffold(
       backgroundColor: AppColors.smoke,
       appBar: AppBar(
-        title: const Text('Historial de Alertas'),
+        title: Text('Historial de Alertas'),
         backgroundColor: AppColors.smoke,
       ),
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         children: [
-          const SectionHeader(
+          SectionHeader(
             tag: 'Historial',
             title: 'Alertas recibidas',
             subtitle:
                 'Alertas geolocalizadas de las zonas bajo tu responsabilidad, conservadas 30 días.',
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
 
           if (provider.loadingHistory)
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.all(40),
-                child: CircularProgressIndicator(color: AppColors.fireMid),
-              ),
+            Padding(
+              padding: EdgeInsets.only(top: 8),
+              child: SkeletonList(itemCount: 4, isCard: false),
             )
           else if (history.isEmpty)
-            const Center(
+            Center(
               child: Padding(
                 padding: EdgeInsets.all(40),
                 child: Text(
@@ -72,7 +71,7 @@ class _AlertHistoryScreenState extends State<AlertHistoryScreen> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const RiskMapScreen()),
+                    MaterialPageRoute(builder: (_) => RiskMapScreen()),
                   );
                 },
               ),

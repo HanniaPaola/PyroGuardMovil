@@ -8,6 +8,7 @@ import '../../../../core/widgets/offline_badge.dart';
 import 'technical_directive_screen.dart';
 import 'zone_profile_screen.dart';
 import '../../../../core/widgets/custom_polygon_map.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 
 /// HU01: mapa de riesgo en tiempo real con indicadores por zona.
 /// El widget de mapa es un placeholder listo para integrar
@@ -20,6 +21,7 @@ class RiskMapScreen extends StatefulWidget {
 }
 
 class _RiskMapScreenState extends State<RiskMapScreen> {
+  bool _showZones = false;
   @override
   void initState() {
     super.initState();
@@ -63,52 +65,78 @@ class _RiskMapScreenState extends State<RiskMapScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<BrigadistaProvider>();
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isLandscape = screenWidth > 600;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       backgroundColor: AppColors.smoke,
       appBar: AppBar(
-        title: const Text('Mapa de Riesgo'),
-        backgroundColor: AppColors.smoke,
+        title: const Text(
+          'Mapa de Riesgo',
+          style: TextStyle(
+            color: Colors.white,
+            shadows: [Shadow(color: Colors.black54, blurRadius: 4)],
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+          shadows: [Shadow(color: Colors.black54, blurRadius: 4)],
+        ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.only(right: 8),
             child: Center(child: OfflineBadge(isOffline: provider.isOffline)),
           ),
+          IconButton(
+            icon: const Icon(Icons.layers),
+            onPressed: () {
+              setState(() {
+                _showZones = !_showZones;
+              });
+            },
+          ),
+          const SizedBox(width: 8),
         ],
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final isLandscape = constraints.maxWidth > 600;
-
-          if (isLandscape) {
-            return Row(
-              children: [
-                const Expanded(
-                  flex: 5,
-                  child: CustomPolygonMap(height: double.infinity),
-                ),
-                Expanded(
-                  flex: 4,
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 16),
-                      _buildHeader(provider),
-                      Expanded(child: _buildZonesList(provider)),
-                    ],
+      body: Stack(
+        children: [
+          const Positioned.fill(
+            child: CustomPolygonMap(height: double.infinity),
+          ),
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            top: _showZones ? 100 : -MediaQuery.of(context).size.height,
+            right: 16,
+            bottom: isLandscape ? 16 : null,
+            height: isLandscape ? null : MediaQuery.of(context).size.height * 0.6,
+            width: isLandscape ? 340 : screenWidth - 32,
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColors.smoke.withValues(alpha: 0.95),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.2)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.5),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
                   ),
-                ),
-              ],
-            );
-          } else {
-            return Column(
-              children: [
-                const CustomPolygonMap(height: 280),
-                _buildHeader(provider),
-                Expanded(child: _buildZonesList(provider)),
-              ],
-            );
-          }
-        },
+                ],
+              ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 16),
+                  _buildHeader(provider),
+                  Expanded(child: _buildZonesList(provider, null)),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -118,7 +146,7 @@ class _RiskMapScreenState extends State<RiskMapScreen> {
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
       child: Row(
         children: [
-          const Text(
+          Text(
             'ZONAS MONITOREADAS',
             style: TextStyle(
               color: AppColors.fireMid,
@@ -127,10 +155,10 @@ class _RiskMapScreenState extends State<RiskMapScreen> {
               letterSpacing: 1.2,
             ),
           ),
-          const Spacer(),
+          Spacer(),
           Text(
             '${provider.zones.length} zonas',
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textMuted,
               fontSize: 11,
             ),
@@ -140,17 +168,16 @@ class _RiskMapScreenState extends State<RiskMapScreen> {
     );
   }
 
-  Widget _buildZonesList(BrigadistaProvider provider) {
+  Widget _buildZonesList(BrigadistaProvider provider, ScrollController? scrollController) {
     if (provider.loadingZones) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.fireMid),
-      );
+      return const SkeletonList(itemCount: 4, isCard: true);
     }
     return RefreshIndicator(
       color: AppColors.fireMid,
       backgroundColor: AppColors.ash,
       onRefresh: provider.loadZones,
       child: ListView.builder(
+        controller: scrollController,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: provider.zones.length,
         itemBuilder: (context, i) {

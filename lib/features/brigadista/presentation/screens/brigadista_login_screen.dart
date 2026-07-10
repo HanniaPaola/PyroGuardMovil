@@ -42,7 +42,7 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
     if (success) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const BrigadistaHomeScreen()),
+        MaterialPageRoute(builder: (_) => BrigadistaHomeScreen()),
       );
     }
     // Si falla, el error se muestra reactivamente vía authProvider.errorMessage
@@ -58,7 +58,7 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 40),
+            padding: EdgeInsets.symmetric(horizontal: 28, vertical: 40),
             child: Form(
               key: _formKey,
               child: Column(
@@ -68,11 +68,11 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
                   Container(
                     width: 84,
                     height: 84,
-                    margin: const EdgeInsets.only(bottom: 24),
+                    margin: EdgeInsets.only(bottom: 24),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      gradient: const LinearGradient(
+                      gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [AppColors.fireMid, AppColors.ember],
@@ -85,10 +85,10 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
                         ),
                       ],
                     ),
-                    child: const Text('🧑‍🚒', style: TextStyle(fontSize: 38)),
+                    child: Text('🧑‍🚒', style: TextStyle(fontSize: 38)),
                   ),
 
-                  const Center(
+                  Center(
                     child: Text(
                       'Acceso Brigadista',
                       style: TextStyle(
@@ -98,8 +98,8 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 6),
-                  const Center(
+                  SizedBox(height: 6),
+                  Center(
                     child: Text(
                       'PyroGuard AI · Módulo de campo',
                       style: TextStyle(
@@ -109,16 +109,16 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 36),
+                  SizedBox(height: 36),
 
                   // Campo: correo
                   _FieldLabel('CORREO ELECTRÓNICO'),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   TextFormField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     autocorrect: false,
-                    style: const TextStyle(color: AppColors.white),
+                    style: TextStyle(color: AppColors.white),
                     decoration: _inputDecoration(
                       hint: 'correo@ejemplo.com',
                       icon: Icons.email_outlined,
@@ -135,15 +135,15 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
                     },
                   ),
 
-                  const SizedBox(height: 18),
+                  SizedBox(height: 18),
 
                   // Campo: contraseña
                   _FieldLabel('CONTRASEÑA'),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   TextFormField(
                     controller: _passwordController,
                     obscureText: _obscurePassword,
-                    style: const TextStyle(color: AppColors.white),
+                    style: TextStyle(color: AppColors.white),
                     decoration: _inputDecoration(
                       hint: '••••••••',
                       icon: Icons.lock_outline,
@@ -169,9 +169,9 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
                   ),
 
                   if (authProvider.errorMessage != null) ...[
-                    const SizedBox(height: 14),
+                    SizedBox(height: 14),
                     Container(
-                      padding: const EdgeInsets.all(12),
+                      padding: EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: AppColors.riskCritical.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
@@ -181,7 +181,7 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
                       ),
                       child: Text(
                         authProvider.errorMessage!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.riskCritical,
                           fontSize: 12,
                         ),
@@ -189,12 +189,12 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
                     ),
                   ],
 
-                  const SizedBox(height: 14),
+                  SizedBox(height: 14),
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {},
-                      child: const Text(
+                      child: Text(
                         '¿Olvidaste tu contraseña?',
                         style: TextStyle(
                           color: AppColors.textDim,
@@ -204,7 +204,7 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 18),
+                  SizedBox(height: 18),
 
                   // Botón ingresar
                   SizedBox(
@@ -222,7 +222,7 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
                         elevation: 0,
                       ),
                       child: authProvider.isLoading
-                          ? const SizedBox(
+                          ? SizedBox(
                               width: 22,
                               height: 22,
                               child: CircularProgressIndicator(
@@ -230,7 +230,7 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
                                 color: AppColors.white,
                               ),
                             )
-                          : const Text(
+                          : Text(
                               'Ingresar',
                               style: TextStyle(
                                 color: AppColors.white,
@@ -241,7 +241,7 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 28),
+                  SizedBox(height: 28),
                   Row(
                     children: [
                       Expanded(
@@ -249,7 +249,7 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
                           color: AppColors.textMuted.withValues(alpha: 0.2),
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
                           'Acceso restringido a personal Conafor',
@@ -282,12 +282,12 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
   }) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 14),
+      hintStyle: TextStyle(color: AppColors.textMuted, fontSize: 14),
       prefixIcon: Icon(icon, color: AppColors.textMuted, size: 20),
       suffixIcon: suffixIcon,
       filled: true,
       fillColor: AppColors.ash,
-      contentPadding: const EdgeInsets.symmetric(vertical: 14),
+      contentPadding: EdgeInsets.symmetric(vertical: 14),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide(color: AppColors.textMuted.withValues(alpha: 0.15)),
@@ -298,15 +298,15 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.fireMid, width: 1.4),
+        borderSide: BorderSide(color: AppColors.fireMid, width: 1.4),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.riskCritical),
+        borderSide: BorderSide(color: AppColors.riskCritical),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.riskCritical, width: 1.4),
+        borderSide: BorderSide(color: AppColors.riskCritical, width: 1.4),
       ),
     );
   }
@@ -320,7 +320,7 @@ class _FieldLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.fireMid,
         fontSize: 11,
         fontWeight: FontWeight.w700,

@@ -4,6 +4,7 @@ import '../providers/community_provider.dart';
 import '../widgets/comunicado_tile.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/section_header.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 
 class AlertHistoryScreen extends StatefulWidget {
   const AlertHistoryScreen({super.key});
@@ -27,12 +28,12 @@ class _AlertHistoryScreenState extends State<AlertHistoryScreen> {
     final history = provider.comunicados;
 
     final totalAlerts = history.length;
-    final recientes = history.where((c) => c.publishDate.isAfter(DateTime.now().subtract(const Duration(days: 7)))).length;
+    final recientes = history.where((c) => c.publishDate.isAfter(DateTime.now().subtract(Duration(days: 7)))).length;
 
     return Scaffold(
       backgroundColor: AppColors.smoke,
       appBar: AppBar(
-        title: const Text('Comunicados'),
+        title: Text('Comunicados'),
         backgroundColor: AppColors.smoke,
       ),
       body: RefreshIndicator(
@@ -42,15 +43,15 @@ class _AlertHistoryScreenState extends State<AlertHistoryScreen> {
           await context.read<CommunityProvider>().loadComunicados();
         },
         child: ListView(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(20),
           children: [
-            const SectionHeader(
+            SectionHeader(
               tag: 'Avisos',
               title: 'Comunicados de la zona',
               subtitle:
                   'Mantente informado de los reportes y actualizaciones de protección civil.',
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
             // Estadísticas
             Row(
@@ -60,7 +61,7 @@ class _AlertHistoryScreenState extends State<AlertHistoryScreen> {
                   label: 'Comunicados',
                   icon: '🔔',
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 _StatCard(
                   value: '$recientes',
                   label: 'Recientes',
@@ -68,9 +69,9 @@ class _AlertHistoryScreenState extends State<AlertHistoryScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
-            const Text(
+            Text(
               'REGISTROS',
               style: TextStyle(
                 color: AppColors.fireMid,
@@ -79,17 +80,15 @@ class _AlertHistoryScreenState extends State<AlertHistoryScreen> {
                 letterSpacing: 1.2,
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
             if (provider.loadingComunicados)
-              const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(40),
-                  child: CircularProgressIndicator(color: AppColors.fireMid),
-                ),
+              Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: SkeletonList(itemCount: 4, isCard: false),
               )
             else if (history.isEmpty)
-              const Center(
+              Center(
                 child: Padding(
                   padding: EdgeInsets.all(40),
                   child: Text(
@@ -123,7 +122,7 @@ class _StatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: AppColors.ash,
           borderRadius: BorderRadius.circular(12),
@@ -132,11 +131,11 @@ class _StatCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(icon, style: const TextStyle(fontSize: 22)),
-            const SizedBox(height: 8),
+            Text(icon, style: TextStyle(fontSize: 22)),
+            SizedBox(height: 8),
             Text(
               value,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.fireGlow,
                 fontSize: 28,
                 fontWeight: FontWeight.w700,
@@ -144,7 +143,7 @@ class _StatCard extends StatelessWidget {
             ),
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.textMuted,
                 fontSize: 12,
                 height: 1.3,

@@ -10,10 +10,10 @@ class PhotoUrlPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (url.trim().isEmpty) return const SizedBox.shrink();
+    if (url.trim().isEmpty) return SizedBox.shrink();
 
     return Container(
-      margin: const EdgeInsets.only(top: 12),
+      margin: EdgeInsets.only(top: 12),
       height: 160,
       width: double.infinity,
       decoration: BoxDecoration(
@@ -27,7 +27,7 @@ class PhotoUrlPreview extends StatelessWidget {
         fit: BoxFit.cover,
         loadingBuilder: (context, child, progress) {
           if (progress == null) return child;
-          return const Center(
+          return Center(
             child: CircularProgressIndicator(
               color: AppColors.fireMid,
               strokeWidth: 2,
@@ -35,7 +35,7 @@ class PhotoUrlPreview extends StatelessWidget {
           );
         },
         errorBuilder: (context, error, stackTrace) {
-          return const Center(
+          return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

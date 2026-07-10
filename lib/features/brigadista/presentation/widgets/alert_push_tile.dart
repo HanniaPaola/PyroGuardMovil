@@ -21,8 +21,8 @@ class AlertPushTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.all(14),
+        margin: EdgeInsets.only(bottom: 10),
+        padding: EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: AppColors.ash,
           borderRadius: BorderRadius.circular(12),
@@ -36,16 +36,16 @@ class AlertPushTile extends StatelessWidget {
                 children: [
                   Text(
                     alert.zoneName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.white,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     '${alert.distanceKm.toStringAsFixed(1)} km · ${_formatDate(alert.receivedAt)}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textMuted,
                       fontSize: 12,
                     ),

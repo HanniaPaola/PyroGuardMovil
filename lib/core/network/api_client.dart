@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'api_constants.dart';
 import 'api_exception.dart';
+
+dynamic _decodeJson(String source) => jsonDecode(source);
 
 /// Cliente HTTP delgado y reutilizable. Centraliza la construcción de
 /// requests para que los datasources de cualquier feature no dupliquen
@@ -27,7 +30,7 @@ class ApiClient {
         body: formFields,
       );
 
-      return _handleResponse(response);
+      return await _handleResponse(response);
     } on http.ClientException {
       throw ApiException(
         'No se pudo conectar al servidor. Verifica tu conexión.',
@@ -52,7 +55,7 @@ class ApiClient {
         body: jsonEncode(body),
       );
 
-      return _handleResponse(response);
+      return await _handleResponse(response);
     } on http.ClientException {
       throw ApiException(
         'No se pudo conectar al servidor. Verifica tu conexión.',
@@ -81,7 +84,7 @@ class ApiClient {
 
       if (response.body.isEmpty) return [];
 
-      final decoded = jsonDecode(response.body);
+      final decoded = await compute(_decodeJson, response.body);
       if (decoded is List) return decoded;
 
       throw ApiException('Respuesta inesperada del servidor.');
@@ -110,7 +113,7 @@ class ApiClient {
       final streamedResponse = await _httpClient.send(request);
       final response = await http.Response.fromStream(streamedResponse);
 
-      return _handleResponse(response);
+      return await _handleResponse(response);
     } on http.ClientException {
       throw ApiException(
         'No se pudo conectar al servidor. Verifica tu conexión.',
@@ -118,7 +121,7 @@ class ApiClient {
     }
   }
 
-  Map<String, dynamic> _handleResponse(http.Response response) {
+  Future<Map<String, dynamic>> _handleResponse(http.Response response) async {
     final isSuccess = response.statusCode >= 200 && response.statusCode < 300;
 
     if (!isSuccess) {
@@ -127,7 +130,7 @@ class ApiClient {
 
     if (response.body.isEmpty) return {};
 
-    final decoded = jsonDecode(response.body);
+    final decoded = await compute(_decodeJson, response.body);
     if (decoded is Map<String, dynamic>) return decoded;
 
     throw ApiException('Respuesta inesperada del servidor.');

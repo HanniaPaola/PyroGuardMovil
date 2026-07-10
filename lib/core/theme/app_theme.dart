@@ -6,7 +6,7 @@ class AppTheme {
     brightness: Brightness.dark,
     scaffoldBackgroundColor: AppColors.smoke,
     primaryColor: AppColors.fireMid,
-    colorScheme: const ColorScheme.dark(
+    colorScheme: ColorScheme.dark(
       primary: AppColors.fireMid,
       secondary: AppColors.fireGlow,
       surface: AppColors.ash,
@@ -14,7 +14,7 @@ class AppTheme {
       onSurface: AppColors.cream,
     ),
     fontFamily: 'Inter',
-    appBarTheme: const AppBarTheme(
+    appBarTheme: AppBarTheme(
       backgroundColor: AppColors.smoke,
       elevation: 0,
       titleTextStyle: TextStyle(
@@ -25,7 +25,7 @@ class AppTheme {
       ),
       iconTheme: IconThemeData(color: AppColors.cream),
     ),
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: AppColors.ash,
       selectedItemColor: AppColors.fireGlow,
       unselectedItemColor: AppColors.textMuted,
@@ -40,7 +40,7 @@ class AppTheme {
         side: const BorderSide(color: Color(0x1AFF6A00)),
       ),
     ),
-    textTheme: const TextTheme(
+    textTheme: TextTheme(
       displayLarge: TextStyle(
         color: AppColors.white,
         fontWeight: FontWeight.w700,

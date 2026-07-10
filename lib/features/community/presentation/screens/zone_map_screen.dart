@@ -5,62 +5,100 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/risk_badge.dart';
 import '../../../../core/widgets/custom_polygon_map.dart';
 import '../../../../core/widgets/zone_weather_widget.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 
-class ZoneMapScreen extends StatelessWidget {
+class ZoneMapScreen extends StatefulWidget {
   const ZoneMapScreen({super.key});
+
+  @override
+  State<ZoneMapScreen> createState() => _ZoneMapScreenState();
+}
+
+class _ZoneMapScreenState extends State<ZoneMapScreen> {
+  bool _showZones = false;
 
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<CommunityProvider>();
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isLandscape = screenWidth > 600;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       backgroundColor: AppColors.smoke,
       appBar: AppBar(
-        title: const Text('Mapa de Riesgo'),
-        backgroundColor: AppColors.smoke,
+        title: const Text(
+          'Mapa de Riesgo',
+          style: TextStyle(
+            color: Colors.white,
+            shadows: [Shadow(color: Colors.black54, blurRadius: 4)],
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+          shadows: [Shadow(color: Colors.black54, blurRadius: 4)],
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.layers),
+            onPressed: () {
+              setState(() {
+                _showZones = !_showZones;
+              });
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final isLandscape = constraints.maxWidth > 600;
-
-          if (isLandscape) {
-            return Row(
-              children: [
-                const Expanded(
-                  flex: 5,
-                  child: CustomPolygonMap(height: double.infinity),
-                ),
-                Expanded(
-                  flex: 4,
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 16),
-                      _buildHeader(),
-                      Expanded(child: _buildZonesList(provider)),
-                    ],
+      body: Stack(
+        children: [
+          const Positioned.fill(
+            child: CustomPolygonMap(height: double.infinity),
+          ),
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            top: _showZones ? 100 : -MediaQuery.of(context).size.height,
+            right: 16,
+            bottom: isLandscape ? 16 : null,
+            height: isLandscape ? null : MediaQuery.of(context).size.height * 0.6,
+            width: isLandscape ? 340 : screenWidth - 32,
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColors.smoke.withValues(alpha: 0.95),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.2)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.5),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
                   ),
-                ),
-              ],
-            );
-          } else {
-            return Column(
-              children: [
-                const CustomPolygonMap(height: 280),
-                _buildHeader(),
-                Expanded(child: _buildZonesList(provider)),
-              ],
-            );
-          }
-        },
+                ],
+              ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 16),
+                  _buildHeader(),
+                  Expanded(child: _buildZonesList(provider, null)),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
+
+
 
   Widget _buildHeader() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
       child: Row(
-        children: const [
+        children: [
           Text(
             'ZONAS',
             style: TextStyle(
@@ -83,13 +121,12 @@ class ZoneMapScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildZonesList(CommunityProvider provider) {
+  Widget _buildZonesList(CommunityProvider provider, ScrollController? scrollController) {
     if (provider.loadingZones) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.fireMid),
-      );
+      return const SkeletonList(itemCount: 4, isCard: true);
     }
     return ListView.builder(
+      controller: scrollController,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       itemCount: provider.zones.length,
       itemBuilder: (context, i) {
@@ -117,7 +154,7 @@ class ZoneMapScreen extends StatelessWidget {
                     children: [
                       Text(
                         z.name,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.white,
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -125,7 +162,7 @@ class ZoneMapScreen extends StatelessWidget {
                       ),
                       Text(
                         z.municipality,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.textMuted,
                           fontSize: 12,
                         ),
@@ -161,7 +198,7 @@ class ZoneMapScreen extends StatelessWidget {
                 Expanded(
                   child: Text(
                     zone.name,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -174,41 +211,41 @@ class ZoneMapScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               zone.municipality,
-              style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
+              style: TextStyle(color: AppColors.textMuted, fontSize: 13),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
               'Causa principal',
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.fireMid,
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1,
               ),
             ),
-            const SizedBox(height: 6),
+            SizedBox(height: 6),
             Text(
               zone.mainCause,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.textDim,
                 fontSize: 14,
                 height: 1.5,
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
               'Qué hacer',
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.fireMid,
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1,
               ),
             ),
-            const SizedBox(height: 6),
+            SizedBox(height: 6),
             Text(
               zone.recommendation,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.fireGlow,
                 fontSize: 14,
                 height: 1.5,

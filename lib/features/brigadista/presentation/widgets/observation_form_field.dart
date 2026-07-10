@@ -20,8 +20,8 @@ class ObservationOptionChip extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+        duration: Duration(milliseconds: 150),
+        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 9),
         decoration: BoxDecoration(
           color: selected ? AppColors.fireMid.withValues(alpha: 0.15) : AppColors.ash,
           borderRadius: BorderRadius.circular(20),

@@ -2,11 +2,13 @@ import '../entities/risk_zone.dart';
 import '../entities/field_observation.dart';
 import '../entities/push_alert.dart';
 import '../entities/zone_intervention.dart';
+import '../entities/simple_zone.dart';
 
 /// Contrato de dominio para el feature Brigadista.
 /// La capa de datos implementa esto combinando fuente remota y local
 /// para soportar el modo offline exigido en HU05.
 abstract class BrigadistaRepository {
+  Future<List<SimpleZone>> getSimpleZones();
   Future<List<RiskZone>> getRiskZones();
   Future<RiskZone> getZoneById(String zoneId);
 

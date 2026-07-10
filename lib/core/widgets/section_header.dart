@@ -19,14 +19,14 @@ class SectionHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
             border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.5)),
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text(
             tag.toUpperCase(),
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.fireGlow,
               fontSize: 10,
               fontWeight: FontWeight.w700,
@@ -34,10 +34,10 @@ class SectionHeader extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.white,
             fontSize: 22,
             fontWeight: FontWeight.w700,
@@ -45,10 +45,10 @@ class SectionHeader extends StatelessWidget {
           ),
         ),
         if (subtitle != null) ...[
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           Text(
             subtitle!,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textDim,
               fontSize: 13,
               height: 1.6,

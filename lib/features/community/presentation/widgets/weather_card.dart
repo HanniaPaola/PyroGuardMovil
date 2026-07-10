@@ -10,7 +10,7 @@ class WeatherCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.ash,
         borderRadius: BorderRadius.circular(12),
@@ -19,7 +19,7 @@ class WeatherCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'CONDICIONES ACTUALES',
             style: TextStyle(
               color: AppColors.fireMid,
@@ -53,9 +53,9 @@ class WeatherCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: AppColors.smoke,
               borderRadius: BorderRadius.circular(8),
@@ -69,7 +69,7 @@ class WeatherCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     weather.explanation,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textDim,
                       fontSize: 13,
                       height: 1.6,
@@ -102,10 +102,10 @@ class _WeatherStat extends StatelessWidget {
       child: Column(
         children: [
           Text(icon, style: const TextStyle(fontSize: 20)),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
             value,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.fireGlow,
               fontSize: 14,
               fontWeight: FontWeight.w700,
@@ -113,7 +113,7 @@ class _WeatherStat extends StatelessWidget {
           ),
           Text(
             label,
-            style: const TextStyle(color: AppColors.textMuted, fontSize: 10),
+            style: TextStyle(color: AppColors.textMuted, fontSize: 10),
             textAlign: TextAlign.center,
           ),
         ],

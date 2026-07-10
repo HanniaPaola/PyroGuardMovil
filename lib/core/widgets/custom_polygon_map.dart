@@ -4,6 +4,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
 import '../constants/app_colors.dart';
+import 'skeleton_loader.dart';
 
 class CustomPolygonMap extends StatefulWidget {
   final double height;
@@ -119,39 +120,30 @@ class _CustomPolygonMapState extends State<CustomPolygonMap> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: widget.height,
       width: double.infinity,
-      margin: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.ash,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.2)),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: _isLoading 
-            ? const Center(child: CircularProgressIndicator(color: AppColors.fireMid))
-            : _hasError 
-                ? const Center(child: Text('Error cargando mapa', style: TextStyle(color: AppColors.textMuted)))
-                : FlutterMap(
-                    options: MapOptions(
-                      initialCenter: _polygons.isNotEmpty && _polygons.first.points.isNotEmpty 
-                          ? _polygons.first.points.first 
-                          : const LatLng(15.75, -92.73),
-                      initialZoom: 9.0,
-                    ),
-                    children: [
-                      TileLayer(
-                        urlTemplate: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-                        subdomains: const ['a', 'b', 'c', 'd'],
-                      ),
-                      PolygonLayer(
-                        polygons: _polygons,
-                      ),
-                    ],
+      child: _isLoading 
+          ? const SkeletonLoader(width: double.infinity, height: double.infinity, borderRadius: 0)
+          : _hasError 
+              ? Center(child: Text('Error cargando mapa', style: TextStyle(color: AppColors.textMuted)))
+              : FlutterMap(
+                  options: MapOptions(
+                    initialCenter: _polygons.isNotEmpty && _polygons.first.points.isNotEmpty 
+                        ? _polygons.first.points.first 
+                        : const LatLng(15.75, -92.73),
+                    initialZoom: 9.0,
                   ),
-      ),
+                  children: [
+                    TileLayer(
+                      urlTemplate: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+                      subdomains: const ['a', 'b', 'c', 'd'],
+                    ),
+                    PolygonLayer(
+                      polygons: _polygons,
+                    ),
+                  ],
+                ),
     );
   }
 }

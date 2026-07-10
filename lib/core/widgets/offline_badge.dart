@@ -12,7 +12,7 @@ class OfflineBadge extends StatelessWidget {
     if (!isOffline) return const SizedBox.shrink();
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         color: AppColors.bark,
         borderRadius: BorderRadius.circular(20),
@@ -20,7 +20,7 @@ class OfflineBadge extends StatelessWidget {
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: const [
+        children: [
           Icon(Icons.cloud_off_rounded, size: 13, color: AppColors.textDim),
           SizedBox(width: 5),
           Text(

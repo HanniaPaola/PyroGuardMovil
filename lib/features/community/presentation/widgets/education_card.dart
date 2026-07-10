@@ -5,7 +5,7 @@ class EducationCard extends StatefulWidget {
   final String icon;
   final String title;
   final String body;
-  final Color accentColor;
+  final Color? accentColor;
   final int index;
 
   const EducationCard({
@@ -13,7 +13,7 @@ class EducationCard extends StatefulWidget {
     required this.icon,
     required this.title,
     required this.body,
-    this.accentColor = AppColors.fireMid,
+    this.accentColor,
     this.index = 0,
   });
 
@@ -65,12 +65,12 @@ class _EducationCardState extends State<EducationCard> with SingleTickerProvider
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: widget.accentColor.withValues(alpha: 0.08),
+                color: (widget.accentColor ?? AppColors.fireMid).withValues(alpha: 0.08),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
             ],
-            border: Border.all(color: widget.accentColor.withValues(alpha: 0.3)),
+            border: Border.all(color: (widget.accentColor ?? AppColors.fireMid).withValues(alpha: 0.3)),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,14 +81,14 @@ class _EducationCardState extends State<EducationCard> with SingleTickerProvider
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      widget.accentColor.withValues(alpha: 0.2),
-                      widget.accentColor.withValues(alpha: 0.05),
+                      (widget.accentColor ?? AppColors.fireMid).withValues(alpha: 0.2),
+                      (widget.accentColor ?? AppColors.fireMid).withValues(alpha: 0.05),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: widget.accentColor.withValues(alpha: 0.4)),
+                  border: Border.all(color: (widget.accentColor ?? AppColors.fireMid).withValues(alpha: 0.4)),
                 ),
                 child: Center(
                   child: Text(widget.icon, style: const TextStyle(fontSize: 24)),
@@ -101,7 +101,7 @@ class _EducationCardState extends State<EducationCard> with SingleTickerProvider
                   children: [
                     Text(
                       widget.title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.white,
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
@@ -112,7 +112,7 @@ class _EducationCardState extends State<EducationCard> with SingleTickerProvider
                     const SizedBox(height: 8),
                     Text(
                       widget.body,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textDim,
                         fontSize: 14,
                         height: 1.5,

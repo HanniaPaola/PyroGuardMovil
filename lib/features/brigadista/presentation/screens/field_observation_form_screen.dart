@@ -5,8 +5,6 @@ import '../widgets/observation_form_field.dart';
 import '../../domain/entities/field_observation.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/section_header.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 
 /// HU03: formulario de observación técnica en campo. Captura coordenadas
@@ -28,11 +26,9 @@ class _FieldObservationFormScreenState
   double? _longitude;
   bool _locatingGps = true;
 
-  List<dynamic> _zones = [];
   String? _selectedZoneId;
-  bool _loadingZones = true;
 
-  final List<String> _options = const [
+  final List<String> _options = [
     'Acceso vehicular',
     'Sin acceso vehicular',
     'Agua cercana',
@@ -47,31 +43,9 @@ class _FieldObservationFormScreenState
   void initState() {
     super.initState();
     _captureGpsLocation();
-    _fetchSimpleZones();
-  }
-
-  Future<void> _fetchSimpleZones() async {
-    try {
-      final response = await http.get(Uri.parse('https://pyroguard.inode.cloud/ml/api/v1/zonas/simple'));
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body) as List<dynamic>;
-        if (mounted) {
-          setState(() {
-            _zones = data;
-            if (_zones.isNotEmpty) {
-              _selectedZoneId = _zones.first['id_zona'];
-            }
-            _loadingZones = false;
-          });
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _loadingZones = false;
-        });
-      }
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<BrigadistaProvider>().loadSimpleZones();
+    });
   }
 
   Future<void> _captureGpsLocation() async {
@@ -99,7 +73,7 @@ class _FieldObservationFormScreenState
       }
 
       final position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
+        locationSettings: LocationSettings(
           accuracy: LocationAccuracy.high,
         ),
       );
@@ -141,7 +115,7 @@ class _FieldObservationFormScreenState
     if (_latitude == null || _longitude == null) return;
     if (_selectedZoneId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Selecciona una zona primero')),
+        SnackBar(content: Text('Selecciona una zona primero')),
       );
       return;
     }
@@ -166,11 +140,9 @@ class _FieldObservationFormScreenState
         backgroundColor: AppColors.ash,
         content: Text(
           success
-              ? (provider.isOffline
-                    ? 'Observación guardada localmente. Se enviará al recuperar conexión.'
-                    : 'Observación enviada correctamente.')
+              ? 'Observación enviada correctamente.'
               : 'No se pudo guardar la observación. Intenta de nuevo.',
-          style: const TextStyle(color: AppColors.cream),
+          style: TextStyle(color: AppColors.cream),
         ),
       ),
     );
@@ -191,22 +163,22 @@ class _FieldObservationFormScreenState
     return Scaffold(
       backgroundColor: AppColors.smoke,
       appBar: AppBar(
-        title: const Text('Nueva Observación'),
+        title: Text('Nueva Observación'),
         backgroundColor: AppColors.smoke,
       ),
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         children: [
-          const SectionHeader(
+          SectionHeader(
             tag: 'Registro de campo',
             title: 'Observación técnica',
             subtitle:
                 'Documenta condiciones, accesos y recursos disponibles en tu ubicación actual.',
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
 
           // Selector de Zona
-          const Text(
+          Text(
             'ZONA A REPORTAR',
             style: TextStyle(
               color: AppColors.fireMid,
@@ -215,14 +187,14 @@ class _FieldObservationFormScreenState
               letterSpacing: 1.2,
             ),
           ),
-          const SizedBox(height: 10),
-          _loadingZones
-              ? const CircularProgressIndicator(color: AppColors.fireMid)
+          SizedBox(height: 10),
+          provider.loadingSimpleZones
+              ? CircularProgressIndicator(color: AppColors.fireMid)
               : DropdownButtonFormField<String>(
                   isExpanded: true,
                   initialValue: _selectedZoneId,
                   dropdownColor: AppColors.ash,
-                  style: const TextStyle(color: AppColors.white),
+                  style: TextStyle(color: AppColors.white),
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: AppColors.ash,
@@ -231,11 +203,11 @@ class _FieldObservationFormScreenState
                       borderSide: BorderSide.none,
                     ),
                   ),
-                  items: _zones.map((z) {
+                  items: provider.simpleZones.map((z) {
                     return DropdownMenuItem<String>(
-                      value: z['id_zona'],
+                      value: z.id,
                       child: Text(
-                        z['nombre'] ?? 'Desconocida',
+                        z.name,
                         overflow: TextOverflow.ellipsis,
                       ),
                     );
@@ -245,13 +217,14 @@ class _FieldObservationFormScreenState
                       _selectedZoneId = val;
                     });
                   },
+                  hint: Text('Selecciona una zona', style: TextStyle(color: AppColors.textMuted)),
                 ),
 
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
 
           // GPS
           Container(
-            padding: const EdgeInsets.all(14),
+            padding: EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: AppColors.ash,
               borderRadius: BorderRadius.circular(12),
@@ -266,13 +239,13 @@ class _FieldObservationFormScreenState
                       : AppColors.fireGlow,
                   size: 20,
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     _locatingGps
                         ? 'Obteniendo coordenadas GPS...'
                         : 'Ubicación capturada: ${_latitude!.toStringAsFixed(4)}, ${_longitude!.toStringAsFixed(4)}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textDim,
                       fontSize: 13,
                     ),
@@ -282,8 +255,8 @@ class _FieldObservationFormScreenState
             ),
           ),
 
-          const SizedBox(height: 20),
-          const Text(
+          SizedBox(height: 20),
+          Text(
             'CONDICIONES OBSERVADAS',
             style: TextStyle(
               color: AppColors.fireMid,
@@ -292,7 +265,7 @@ class _FieldObservationFormScreenState
               letterSpacing: 1.2,
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -305,8 +278,8 @@ class _FieldObservationFormScreenState
             }).toList(),
           ),
 
-          const SizedBox(height: 20),
-          const Text(
+          SizedBox(height: 20),
+          Text(
             'NOTAS ADICIONALES',
             style: TextStyle(
               color: AppColors.fireMid,
@@ -315,20 +288,20 @@ class _FieldObservationFormScreenState
               letterSpacing: 1.2,
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           TextField(
             controller: _notesController,
             maxLines: 5,
-            style: const TextStyle(color: AppColors.white, fontSize: 14),
+            style: TextStyle(color: AppColors.white, fontSize: 14),
             decoration: InputDecoration(
               hintText: 'Describe lo que observas en el terreno...',
-              hintStyle: const TextStyle(
+              hintStyle: TextStyle(
                 color: AppColors.textMuted,
                 fontSize: 13,
               ),
               filled: true,
               fillColor: AppColors.ash,
-              contentPadding: const EdgeInsets.all(14),
+              contentPadding: EdgeInsets.all(14),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(
@@ -337,7 +310,7 @@ class _FieldObservationFormScreenState
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
+                borderSide: BorderSide(
                   color: AppColors.fireMid,
                   width: 1.4,
                 ),
@@ -345,7 +318,7 @@ class _FieldObservationFormScreenState
             ),
           ),
 
-          const SizedBox(height: 28),
+          SizedBox(height: 28),
           SizedBox(
             height: 52,
             child: ElevatedButton(
@@ -360,7 +333,7 @@ class _FieldObservationFormScreenState
                 ),
               ),
               child: provider.submittingObservation
-                  ? const SizedBox(
+                  ? SizedBox(
                       width: 22,
                       height: 22,
                       child: CircularProgressIndicator(
@@ -368,7 +341,7 @@ class _FieldObservationFormScreenState
                         color: AppColors.white,
                       ),
                     )
-                  : const Text(
+                  : Text(
                       'Guardar observación',
                       style: TextStyle(
                         color: AppColors.white,
@@ -378,7 +351,7 @@ class _FieldObservationFormScreenState
                     ),
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
         ],
       ),
     );

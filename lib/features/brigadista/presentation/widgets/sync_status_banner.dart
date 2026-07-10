@@ -15,7 +15,7 @@ class SyncStatusBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!isOffline && pendingCount == 0) return const SizedBox.shrink();
+    if (!isOffline && pendingCount == 0) return SizedBox.shrink();
 
     final color = isOffline ? AppColors.fireMid : AppColors.fireGlow;
     final text = isOffline

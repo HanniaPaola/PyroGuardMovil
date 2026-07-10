@@ -4,6 +4,7 @@ import '../../domain/entities/risk_zone.dart';
 import '../../domain/entities/field_observation.dart';
 import '../../domain/entities/push_alert.dart';
 import '../../domain/entities/zone_intervention.dart';
+import '../../domain/entities/simple_zone.dart';
 import '../../domain/repositories/brigadista_repository.dart';
 import '../../../../core/services/connectivity_service.dart';
 import '../../../../core/services/push_notification_service.dart';
@@ -35,6 +36,12 @@ class BrigadistaProvider extends ChangeNotifier {
 
   RiskZone? _selectedZone;
   RiskZone? get selectedZone => _selectedZone;
+
+  List<SimpleZone> _simpleZones = [];
+  List<SimpleZone> get simpleZones => _simpleZones;
+
+  bool _loadingSimpleZones = false;
+  bool get loadingSimpleZones => _loadingSimpleZones;
 
   // ----- Conectividad / Offline (HU05) -----
   bool _isOffline = false;
@@ -104,6 +111,18 @@ class BrigadistaProvider extends ChangeNotifier {
   void selectZone(RiskZone zone) {
     _selectedZone = zone;
     notifyListeners();
+  }
+
+  Future<void> loadSimpleZones() async {
+    _loadingSimpleZones = true;
+    notifyListeners();
+
+    try {
+      _simpleZones = await repository.getSimpleZones();
+    } finally {
+      _loadingSimpleZones = false;
+      notifyListeners();
+    }
   }
 
   // ---------------- HU03: Observaciones de campo ----------------

@@ -15,8 +15,8 @@ class InterventionHistoryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
+      margin: EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppColors.ash,
         borderRadius: BorderRadius.circular(12),
@@ -32,7 +32,7 @@ class InterventionHistoryTile extends StatelessWidget {
                   children: [
                     Text(
                       intervention.brigadeName,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.white,
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
@@ -42,10 +42,10 @@ class InterventionHistoryTile extends StatelessWidget {
                     RiskBadge(level: intervention.riskLevelAtTime),
                   ],
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   '${_formatDate(intervention.date)} · ${intervention.result}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.textMuted,
                     fontSize: 12,
                   ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../constants/app_colors.dart';
+import 'skeleton_loader.dart';
 
 class ZoneWeatherWidget extends StatefulWidget {
   final String zoneId;
@@ -49,19 +50,15 @@ class _ZoneWeatherWidgetState extends State<ZoneWeatherWidget> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Padding(
+      return Padding(
         padding: EdgeInsets.only(top: 4.0),
-        child: SizedBox(
-          height: 12,
-          width: 12,
-          child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.fireMid),
-        ),
+        child: SkeletonLoader(width: 100, height: 12),
       );
     }
     if (_error != null || _weatherData == null) {
       return Padding(
-        padding: const EdgeInsets.only(top: 4.0),
-        child: Text(_error ?? '', style: const TextStyle(color: AppColors.textMuted, fontSize: 11)),
+        padding: EdgeInsets.only(top: 4.0),
+        child: Text(_error ?? '', style: TextStyle(color: AppColors.textMuted, fontSize: 11)),
       );
     }
 
@@ -70,7 +67,7 @@ class _ZoneWeatherWidgetState extends State<ZoneWeatherWidget> {
     final wind = _weatherData!['viento'];
 
     return Padding(
-      padding: const EdgeInsets.only(top: 4.0),
+      padding: EdgeInsets.only(top: 4.0),
       child: Wrap(
         spacing: 8,
         runSpacing: 4,
@@ -79,25 +76,25 @@ class _ZoneWeatherWidgetState extends State<ZoneWeatherWidget> {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.thermostat, size: 12, color: AppColors.fireGlow),
-              const SizedBox(width: 2),
-              Text(temp.toString(), style: const TextStyle(color: AppColors.cream, fontSize: 11)),
+              Icon(Icons.thermostat, size: 12, color: AppColors.fireGlow),
+              SizedBox(width: 2),
+              Text(temp.toString(), style: TextStyle(color: AppColors.cream, fontSize: 11)),
             ],
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.water_drop, size: 12, color: Colors.blueAccent),
-              const SizedBox(width: 2),
-              Text(hum.toString(), style: const TextStyle(color: AppColors.cream, fontSize: 11)),
+              Icon(Icons.water_drop, size: 12, color: Colors.blueAccent),
+              SizedBox(width: 2),
+              Text(hum.toString(), style: TextStyle(color: AppColors.cream, fontSize: 11)),
             ],
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.air, size: 12, color: Colors.white70),
-              const SizedBox(width: 2),
-              Text(wind.toString(), style: const TextStyle(color: AppColors.cream, fontSize: 11)),
+              Icon(Icons.air, size: 12, color: Colors.white70),
+              SizedBox(width: 2),
+              Text(wind.toString(), style: TextStyle(color: AppColors.cream, fontSize: 11)),
             ],
           ),
         ],

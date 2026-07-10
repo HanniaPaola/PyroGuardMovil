@@ -29,7 +29,7 @@ class ZoneSummarySheet extends StatelessWidget {
               Expanded(
                 child: Text(
                   zone.name,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
@@ -42,14 +42,14 @@ class ZoneSummarySheet extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             zone.municipality,
-            style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
+            style: TextStyle(color: AppColors.textMuted, fontSize: 13),
           ),
           const SizedBox(height: 16),
           _Label('Causa principal'),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           Text(
             zone.mainCause,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textDim,
               fontSize: 14,
               height: 1.5,
@@ -62,13 +62,13 @@ class ZoneSummarySheet extends StatelessWidget {
                 child: OutlinedButton(
                   onPressed: onViewProfile,
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: AppColors.fireMid),
+                    side: BorderSide(color: AppColors.fireMid),
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Ver perfil de zona',
                     style: TextStyle(
                       color: AppColors.fireGlow,
@@ -88,7 +88,7 @@ class ZoneSummarySheet extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Ver directiva',
                     style: TextStyle(
                       color: AppColors.white,
@@ -114,7 +114,7 @@ class _Label extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.fireMid,
         fontSize: 11,
         fontWeight: FontWeight.w700,

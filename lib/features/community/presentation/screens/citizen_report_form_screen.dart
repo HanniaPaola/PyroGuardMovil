@@ -63,7 +63,7 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
       }
 
       final position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
+        locationSettings: LocationSettings(
           accuracy: LocationAccuracy.high,
         ),
       );
@@ -110,7 +110,7 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No se pudo acceder a la imagen.')),
+        SnackBar(content: Text('No se pudo acceder a la imagen.')),
       );
     }
   }
@@ -153,19 +153,19 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
     return Scaffold(
       backgroundColor: AppColors.smoke,
       appBar: AppBar(
-        title: const Text('Reportar Incendio'),
+        title: Text('Reportar Incendio'),
         backgroundColor: AppColors.smoke,
       ),
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         children: [
-          const SectionHeader(
+          SectionHeader(
             tag: 'Reporte ciudadano',
             title: 'Avísanos lo que ves',
             subtitle:
                 'Tu reporte ayuda a las brigadas a actuar más rápido. No necesitas una cuenta para enviarlo.',
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
 
           Form(
             key: _formKey,
@@ -174,7 +174,7 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
               children: [
                 // Ubicación (GPS)
                 Container(
-                  padding: const EdgeInsets.all(14),
+                  padding: EdgeInsets.all(14),
                   decoration: BoxDecoration(
                     color: AppColors.ash,
                     borderRadius: BorderRadius.circular(12),
@@ -193,13 +193,13 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                                 : AppColors.fireGlow,
                             size: 20,
                           ),
-                          const SizedBox(width: 12),
+                          SizedBox(width: 12),
                           Expanded(
                             child: Text(
                               _locatingGps
                                   ? 'Obteniendo tu ubicación...'
                                   : 'Ubicación: ${_latitudeController.text}, ${_longitudeController.text}',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppColors.textDim,
                                 fontSize: 13,
                               ),
@@ -210,7 +210,7 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                       if (!_locatingGps && _latitudeController.text.isNotEmpty)
                         Container(
                           height: 150,
-                          margin: const EdgeInsets.only(top: 16),
+                          margin: EdgeInsets.only(top: 16),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.12)),
@@ -227,7 +227,7 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                             children: [
                               TileLayer(
                                 urlTemplate: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-                                subdomains: const ['a', 'b', 'c', 'd'],
+                                subdomains: ['a', 'b', 'c', 'd'],
                               ),
                               MarkerLayer(
                                 markers: [
@@ -236,7 +236,7 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                                       double.parse(_latitudeController.text),
                                       double.parse(_longitudeController.text),
                                     ),
-                                    child: const Icon(Icons.location_on, color: AppColors.riskCritical, size: 40),
+                                    child: Icon(Icons.location_on, color: AppColors.riskCritical, size: 40),
                                   )
                                 ],
                               ),
@@ -247,13 +247,13 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
                 _FieldLabel('¿QUÉ ESTÁS VIENDO?'),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 TextFormField(
                   controller: _descriptionController,
                   maxLines: 5,
-                  style: const TextStyle(color: AppColors.white, fontSize: 14),
+                  style: TextStyle(color: AppColors.white, fontSize: 14),
                   decoration: _inputDecoration(
                     hint:
                         'Ej. Humo denso cerca del camino a la reserva, parece avanzar rápido...',
@@ -269,28 +269,28 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                   },
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
                 _FieldLabel('FOTO (OPCIONAL)'),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Row(
                   children: [
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () => _pickImage(ImageSource.camera),
-                        icon: const Icon(Icons.camera_alt, size: 18, color: AppColors.white),
-                        label: const Text('Tomar Foto', style: TextStyle(color: AppColors.white)),
+                        icon: Icon(Icons.camera_alt, size: 18, color: AppColors.white),
+                        label: Text('Tomar Foto', style: TextStyle(color: AppColors.white)),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.ash,
                           side: BorderSide(color: AppColors.fireMid.withValues(alpha: 0.5)),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () => _pickImage(ImageSource.gallery),
-                        icon: const Icon(Icons.photo_library, size: 18, color: AppColors.white),
-                        label: const Text('Galería', style: TextStyle(color: AppColors.white)),
+                        icon: Icon(Icons.photo_library, size: 18, color: AppColors.white),
+                        label: Text('Galería', style: TextStyle(color: AppColors.white)),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.ash,
                           side: BorderSide(color: AppColors.fireMid.withValues(alpha: 0.5)),
@@ -301,7 +301,7 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                 ),
                 if (_pickedImage != null)
                   Container(
-                    margin: const EdgeInsets.only(top: 12),
+                    margin: EdgeInsets.only(top: 12),
                     height: 160,
                     width: double.infinity,
                     decoration: BoxDecoration(
@@ -320,12 +320,12 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                           child: GestureDetector(
                             onTap: () => setState(() => _pickedImage = null),
                             child: Container(
-                              padding: const EdgeInsets.all(6),
-                              decoration: const BoxDecoration(
+                              padding: EdgeInsets.all(6),
+                              decoration: BoxDecoration(
                                 color: Colors.black54,
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(Icons.close, color: Colors.white, size: 18),
+                              child: Icon(Icons.close, color: Colors.white, size: 18),
                             ),
                           ),
                         ),
@@ -334,9 +334,9 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                   ),
 
                 if (provider.errorMessage != null) ...[
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: AppColors.riskCritical.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
@@ -346,7 +346,7 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                     ),
                     child: Text(
                       provider.errorMessage!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.riskCritical,
                         fontSize: 12,
                       ),
@@ -354,7 +354,7 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                   ),
                 ],
 
-                const SizedBox(height: 28),
+                SizedBox(height: 28),
                 SizedBox(
                   height: 52,
                   child: ElevatedButton(
@@ -372,7 +372,7 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                       elevation: 0,
                     ),
                     child: provider.isLoading
-                        ? const SizedBox(
+                        ? SizedBox(
                             width: 22,
                             height: 22,
                             child: CircularProgressIndicator(
@@ -380,7 +380,7 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                               color: AppColors.white,
                             ),
                           )
-                        : const Text(
+                        : Text(
                             'Enviar reporte',
                             style: TextStyle(
                               color: AppColors.white,
@@ -391,14 +391,14 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 14),
+                SizedBox(height: 14),
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: AppColors.fireMid.withValues(alpha: 0.06),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Row(
+                  child: Row(
                     children: [
                       Icon(
                         Icons.info_outline,
@@ -422,7 +422,7 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
         ],
       ),
     );
@@ -431,10 +431,10 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
   InputDecoration _inputDecoration({required String hint}) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 13),
+      hintStyle: TextStyle(color: AppColors.textMuted, fontSize: 13),
       filled: true,
       fillColor: AppColors.ash,
-      contentPadding: const EdgeInsets.all(14),
+      contentPadding: EdgeInsets.all(14),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide(color: AppColors.textMuted.withValues(alpha: 0.15)),
@@ -445,15 +445,15 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.fireMid, width: 1.4),
+        borderSide: BorderSide(color: AppColors.fireMid, width: 1.4),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.riskCritical),
+        borderSide: BorderSide(color: AppColors.riskCritical),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.riskCritical, width: 1.4),
+        borderSide: BorderSide(color: AppColors.riskCritical, width: 1.4),
       ),
     );
   }
@@ -467,7 +467,7 @@ class _FieldLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.fireMid,
         fontSize: 11,
         fontWeight: FontWeight.w700,

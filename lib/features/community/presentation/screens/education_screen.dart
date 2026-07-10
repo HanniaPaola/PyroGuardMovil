@@ -15,7 +15,7 @@ class _EducationScreenState extends State<EducationScreen> {
     return Scaffold(
       backgroundColor: AppColors.smoke,
       body: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
+        physics: BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
             expandedHeight: 180,
@@ -24,8 +24,8 @@ class _EducationScreenState extends State<EducationScreen> {
             backgroundColor: AppColors.smoke,
             elevation: 0,
             flexibleSpace: FlexibleSpaceBar(
-              titlePadding: const EdgeInsets.only(left: 20, bottom: 16),
-              title: const Text(
+              titlePadding: EdgeInsets.only(left: 20, bottom: 16),
+              title: Text(
                 'Aprende y Protege',
                 style: TextStyle(
                   color: AppColors.white,
@@ -64,8 +64,8 @@ class _EducationScreenState extends State<EducationScreen> {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              child: const Text(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              child: Text(
                 'Información clara y práctica sobre incendios forestales para que tú y tu familia estén preparados.',
                 style: TextStyle(
                   color: AppColors.textMuted,
@@ -76,13 +76,13 @@ class _EducationScreenState extends State<EducationScreen> {
             ),
           ),
           SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
                 _categoryTitle('🔥 ¿Qué causa los incendios?', 0),
-                const SizedBox(height: 16),
-                const EducationCard(
+                SizedBox(height: 16),
+                EducationCard(
                   index: 1,
                   icon: '☀️',
                   title: 'Calor extremo y sequía',
@@ -90,7 +90,7 @@ class _EducationScreenState extends State<EducationScreen> {
                       'Cuando pasan muchos días sin lluvia y la temperatura es alta, la vegetación se seca y se enciende fácil. Una chispa basta.',
                   accentColor: AppColors.riskCritical,
                 ),
-                const EducationCard(
+                EducationCard(
                   index: 2,
                   icon: '💨',
                   title: 'Viento fuerte',
@@ -98,7 +98,7 @@ class _EducationScreenState extends State<EducationScreen> {
                       'Seca la vegetación y propaga el fuego rápido en todas direcciones. Es el factor más peligroso durante un incendio.',
                   accentColor: AppColors.riskHigh,
                 ),
-                const EducationCard(
+                EducationCard(
                   index: 3,
                   icon: '🚬',
                   title: 'Descuido humano',
@@ -106,10 +106,10 @@ class _EducationScreenState extends State<EducationScreen> {
                       'La mayoría de incendios son por personas: fogatas mal apagadas o quemas agrícolas sin control.',
                   accentColor: AppColors.riskMedium,
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
                 _categoryTitle('🛡️ Cómo prevenirlos', 4),
-                const SizedBox(height: 16),
-                const EducationCard(
+                SizedBox(height: 16),
+                EducationCard(
                   index: 5,
                   icon: '🚫',
                   title: 'No quemes en temporada de veda',
@@ -117,7 +117,7 @@ class _EducationScreenState extends State<EducationScreen> {
                       'En Chiapas el mayor riesgo es de febrero a mayo. Durante este período están prohibidas las quemas sin permiso.',
                   accentColor: AppColors.fireMid,
                 ),
-                const EducationCard(
+                EducationCard(
                   index: 6,
                   icon: '🏕️',
                   title: 'Apaga bien las fogatas',
@@ -125,7 +125,7 @@ class _EducationScreenState extends State<EducationScreen> {
                       'Cubre las brasas con tierra y agua hasta eliminar el calor. Nunca dejes una fogata sin supervisión.',
                   accentColor: AppColors.fireMid,
                 ),
-                const EducationCard(
+                EducationCard(
                   index: 7,
                   icon: '🌾',
                   title: 'Quemas controladas',
@@ -133,10 +133,10 @@ class _EducationScreenState extends State<EducationScreen> {
                       'Solicita tu permiso. Haz la quema de madrugada, con humedad. Nunca quemes si hay viento.',
                   accentColor: AppColors.fireGlow,
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
                 _categoryTitle('📞 Qué hacer si hay incendio', 8),
-                const SizedBox(height: 16),
-                const EducationCard(
+                SizedBox(height: 16),
+                EducationCard(
                   index: 9,
                   icon: '📱',
                   title: 'Llama al 911 inmediatamente',
@@ -144,7 +144,7 @@ class _EducationScreenState extends State<EducationScreen> {
                       'Da tu ubicación precisa. Cada minuto cuenta para que las brigadas actúen a tiempo.',
                   accentColor: AppColors.riskCritical,
                 ),
-                const EducationCard(
+                EducationCard(
                   index: 10,
                   icon: '🏃',
                   title: 'Aléjate del viento',
@@ -152,7 +152,7 @@ class _EducationScreenState extends State<EducationScreen> {
                       'Aleja a tu familia en dirección contraria al viento. El fuego viaja hacia donde sopla.',
                   accentColor: AppColors.riskCritical,
                 ),
-                const EducationCard(
+                EducationCard(
                   index: 11,
                   icon: '🤖',
                   title: 'PyroGuard AI',
@@ -160,7 +160,7 @@ class _EducationScreenState extends State<EducationScreen> {
                       'Monitoreamos clima y riesgo cada 30 min. Te avisamos antes del peligro para que puedas actuar.',
                   accentColor: AppColors.fireGlow,
                 ),
-                const SizedBox(height: 40),
+                SizedBox(height: 40),
               ]),
             ),
           ),
@@ -194,12 +194,12 @@ class _AnimatedCategoryTitleState extends State<_AnimatedCategoryTitle> with Sin
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: Duration(milliseconds: 500),
     );
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOut),
     );
-    _slideAnimation = Tween<Offset>(begin: const Offset(-0.1, 0), end: Offset.zero).animate(
+    _slideAnimation = Tween<Offset>(begin: Offset(-0.1, 0), end: Offset.zero).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOut),
     );
 
@@ -221,15 +221,15 @@ class _AnimatedCategoryTitleState extends State<_AnimatedCategoryTitle> with Sin
       child: SlideTransition(
         position: _slideAnimation,
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           decoration: BoxDecoration(
             color: AppColors.fireMid.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
-            border: const Border(left: BorderSide(color: AppColors.fireMid, width: 4)),
+            border: Border(left: BorderSide(color: AppColors.fireMid, width: 4)),
           ),
           child: Text(
             widget.text,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.cream,
               fontSize: 16,
               fontWeight: FontWeight.bold,

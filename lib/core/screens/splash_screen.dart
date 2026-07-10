@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       if (mounted) {
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => const CommunityHomeScreen(),
+            pageBuilder: (context, animation, secondaryAnimation) => CommunityHomeScreen(),
             transitionsBuilder: (context, animation, secondaryAnimation, child) {
               return FadeTransition(opacity: animation, child: child);
             },
@@ -95,7 +95,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                     ScaleTransition(
                       scale: _pulseAnimation,
                       child: Container(
-                        padding: const EdgeInsets.all(28),
+                        padding: EdgeInsets.all(28),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppColors.smoke,
@@ -116,15 +116,15 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                             width: 2,
                           ),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.local_fire_department_rounded,
                           size: 90,
                           color: AppColors.fireMid,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 40),
-                    const Text(
+                    SizedBox(height: 40),
+                    Text(
                       'PyroGuard AI',
                       style: TextStyle(
                         color: AppColors.white,
@@ -140,7 +140,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         ],
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     Text(
                       'Protegiendo nuestro futuro',
                       style: TextStyle(
@@ -151,7 +151,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       ),
                     ),
                     const SizedBox(height: 60),
-                    const SizedBox(
+                    SizedBox(
                       width: 40,
                       height: 40,
                       child: CircularProgressIndicator(
