@@ -15,7 +15,9 @@ class CitizenReportRemoteDataSource {
     String? photoUrl,
   }) async {
     String? finalPhotoUrl = photoUrl;
-    if (photoUrl != null && !photoUrl.startsWith('http') && !photoUrl.startsWith('data:')) {
+    if (photoUrl != null &&
+        !photoUrl.startsWith('http') &&
+        !photoUrl.startsWith('data:')) {
       final uploadRes = await apiClient.postMultipart(
         ApiConstants.uploadFile,
         'file',
@@ -38,5 +40,4 @@ class CitizenReportRemoteDataSource {
 
     return CitizenReportModel.fromJson(response);
   }
-
 }

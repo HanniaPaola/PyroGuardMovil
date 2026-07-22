@@ -40,7 +40,7 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
 
   Future<void> _captureGpsLocation() async {
     setState(() => _locatingGps = true);
-    
+
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -63,11 +63,9 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
       }
 
       final position = await Geolocator.getCurrentPosition(
-        locationSettings: LocationSettings(
-          accuracy: LocationAccuracy.high,
-        ),
+        locationSettings: LocationSettings(accuracy: LocationAccuracy.high),
       );
-      
+
       if (!mounted) return;
       setState(() {
         _latitudeController.text = position.latitude.toString();
@@ -101,7 +99,10 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
 
   Future<void> _pickImage(ImageSource source) async {
     try {
-      final picked = await _imagePicker.pickImage(source: source, imageQuality: 70);
+      final picked = await _imagePicker.pickImage(
+        source: source,
+        imageQuality: 70,
+      );
       if (picked != null) {
         setState(() {
           _pickedImage = File(picked.path);
@@ -187,7 +188,9 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                       Row(
                         children: [
                           Icon(
-                            _locatingGps ? Icons.gps_not_fixed : Icons.gps_fixed,
+                            _locatingGps
+                                ? Icons.gps_not_fixed
+                                : Icons.gps_fixed,
                             color: _locatingGps
                                 ? AppColors.textMuted
                                 : AppColors.fireGlow,
@@ -213,7 +216,9 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                           margin: EdgeInsets.only(top: 16),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.12)),
+                            border: Border.all(
+                              color: AppColors.fireMid.withValues(alpha: 0.12),
+                            ),
                           ),
                           clipBehavior: Clip.antiAlias,
                           child: FlutterMap(
@@ -226,7 +231,8 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                             ),
                             children: [
                               TileLayer(
-                                urlTemplate: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+                                urlTemplate:
+                                    'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
                                 subdomains: ['a', 'b', 'c', 'd'],
                               ),
                               MarkerLayer(
@@ -236,8 +242,12 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                                       double.parse(_latitudeController.text),
                                       double.parse(_longitudeController.text),
                                     ),
-                                    child: Icon(Icons.location_on, color: AppColors.riskCritical, size: 40),
-                                  )
+                                    child: Icon(
+                                      Icons.location_on,
+                                      color: AppColors.riskCritical,
+                                      size: 40,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ],
@@ -277,11 +287,20 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () => _pickImage(ImageSource.camera),
-                        icon: Icon(Icons.camera_alt, size: 18, color: AppColors.white),
-                        label: Text('Tomar Foto', style: TextStyle(color: AppColors.white)),
+                        icon: Icon(
+                          Icons.camera_alt,
+                          size: 18,
+                          color: AppColors.white,
+                        ),
+                        label: Text(
+                          'Tomar Foto',
+                          style: TextStyle(color: AppColors.white),
+                        ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.ash,
-                          side: BorderSide(color: AppColors.fireMid.withValues(alpha: 0.5)),
+                          side: BorderSide(
+                            color: AppColors.fireMid.withValues(alpha: 0.5),
+                          ),
                         ),
                       ),
                     ),
@@ -289,11 +308,20 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () => _pickImage(ImageSource.gallery),
-                        icon: Icon(Icons.photo_library, size: 18, color: AppColors.white),
-                        label: Text('Galería', style: TextStyle(color: AppColors.white)),
+                        icon: Icon(
+                          Icons.photo_library,
+                          size: 18,
+                          color: AppColors.white,
+                        ),
+                        label: Text(
+                          'Galería',
+                          style: TextStyle(color: AppColors.white),
+                        ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.ash,
-                          side: BorderSide(color: AppColors.fireMid.withValues(alpha: 0.5)),
+                          side: BorderSide(
+                            color: AppColors.fireMid.withValues(alpha: 0.5),
+                          ),
                         ),
                       ),
                     ),
@@ -307,7 +335,9 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                     decoration: BoxDecoration(
                       color: AppColors.ash,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.15)),
+                      border: Border.all(
+                        color: AppColors.fireMid.withValues(alpha: 0.15),
+                      ),
                     ),
                     clipBehavior: Clip.antiAlias,
                     child: Stack(
@@ -325,7 +355,11 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                                 color: Colors.black54,
                                 shape: BoxShape.circle,
                               ),
-                              child: Icon(Icons.close, color: Colors.white, size: 18),
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: 18,
+                              ),
                             ),
                           ),
                         ),
@@ -437,11 +471,15 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
       contentPadding: EdgeInsets.all(14),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: AppColors.textMuted.withValues(alpha: 0.15)),
+        borderSide: BorderSide(
+          color: AppColors.textMuted.withValues(alpha: 0.15),
+        ),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: AppColors.textMuted.withValues(alpha: 0.15)),
+        borderSide: BorderSide(
+          color: AppColors.textMuted.withValues(alpha: 0.15),
+        ),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),

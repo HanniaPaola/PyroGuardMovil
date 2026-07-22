@@ -16,13 +16,19 @@ class BrigadistaRemoteDataSource {
 
   Future<List<SimpleZone>> fetchSimpleZones() async {
     try {
-      final response = await http.get(Uri.parse('https://pyroguard.inode.cloud/ml/api/v1/zonas/simple'));
+      final response = await http.get(
+        Uri.parse('https://pyroguard.inode.cloud/ml/api/v1/zonas/simple'),
+      );
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
-        return data.map((z) => SimpleZone(
-          id: z['id_zona'] as String? ?? '',
-          name: z['nombre'] as String? ?? 'Desconocida',
-        )).toList();
+        return data
+            .map(
+              (z) => SimpleZone(
+                id: z['id_zona'] as String? ?? '',
+                name: z['nombre'] as String? ?? 'Desconocida',
+              ),
+            )
+            .toList();
       }
       return [];
     } catch (e) {
@@ -34,7 +40,11 @@ class BrigadistaRemoteDataSource {
     try {
       final responses = await Future.wait([
         http.get(Uri.parse('https://pyroguard.inode.cloud/ml/api/v1/zonas/')),
-        http.get(Uri.parse('https://pyroguard.inode.cloud/ml/api/v1/zonas/riesgo-publico')),
+        http.get(
+          Uri.parse(
+            'https://pyroguard.inode.cloud/ml/api/v1/zonas/riesgo-publico',
+          ),
+        ),
       ]);
 
       if (responses[0].statusCode == 200 && responses[1].statusCode == 200) {
@@ -59,7 +69,8 @@ class BrigadistaRemoteDataSource {
             longitude: -93.0,
             riskLevel: riesgo,
             mainCause: 'Monitoreo automatizado con ML.',
-            technicalDirective: 'Siga las directivas correspondientes al nivel de riesgo detectado.',
+            technicalDirective:
+                'Siga las directivas correspondientes al nivel de riesgo detectado.',
             lastUpdated: DateTime.now(),
           );
         }).toList();
@@ -132,7 +143,7 @@ class BrigadistaRemoteDataSource {
       "recursos_necesarios": "N/A",
       "observaciones_texto": jsonObs['conditionNotes'],
     };
-    
+
     final tokenService = TokenStorageService();
     final token = await tokenService.getAccessToken();
     // ApiClient already appends 'Bearer ' when passing bearerToken
@@ -146,5 +157,20 @@ class BrigadistaRemoteDataSource {
     } catch (e) {
       throw Exception('Upload failed: $e');
     }
+  }
+
+  Future<void> sendEmergency(double latitude, double longitude) async {
+    // Por el momento no hay endpoint, simulamos el envío de emergencia con un retardo.
+    await Future.delayed(const Duration(seconds: 2));
+    /*
+    final payload = {
+      "latitud": latitude,
+      "longitud": longitude,
+      "tipo": "SOS_BRIGADISTA",
+      "timestamp": DateTime.now().toIso8601String(),
+    };
+    final token = await TokenStorageService().getAccessToken();
+    await apiClient.postJson('/v1/emergencias/', payload, bearerToken: token);
+    */
   }
 }

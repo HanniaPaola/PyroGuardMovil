@@ -70,10 +70,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 SizedBox(height: 8),
                 Text(
                   widget.zone.municipality,
-                  style: TextStyle(
-                    color: AppColors.textMuted,
-                    fontSize: 13,
-                  ),
+                  style: TextStyle(color: AppColors.textMuted, fontSize: 13),
                 ),
                 SizedBox(height: 12),
                 Container(

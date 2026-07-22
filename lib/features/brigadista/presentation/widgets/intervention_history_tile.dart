@@ -45,10 +45,7 @@ class InterventionHistoryTile extends StatelessWidget {
                 SizedBox(height: 4),
                 Text(
                   '${_formatDate(intervention.date)} · ${intervention.result}',
-                  style: TextStyle(
-                    color: AppColors.textMuted,
-                    fontSize: 12,
-                  ),
+                  style: TextStyle(color: AppColors.textMuted, fontSize: 12),
                 ),
               ],
             ),

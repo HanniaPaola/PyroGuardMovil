@@ -81,10 +81,7 @@ class _ZoneProfileScreenState extends State<ZoneProfileScreen> {
                 SizedBox(height: 4),
                 Text(
                   widget.zone.municipality,
-                  style: TextStyle(
-                    color: AppColors.textMuted,
-                    fontSize: 13,
-                  ),
+                  style: TextStyle(color: AppColors.textMuted, fontSize: 13),
                 ),
               ],
             ),
@@ -104,7 +101,9 @@ class _ZoneProfileScreenState extends State<ZoneProfileScreen> {
             decoration: BoxDecoration(
               color: AppColors.ash,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.12)),
+              border: Border.all(
+                color: AppColors.fireMid.withValues(alpha: 0.12),
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -159,10 +158,7 @@ class _ZoneProfileScreenState extends State<ZoneProfileScreen> {
               Spacer(),
               Text(
                 '${interventions.length} de 5',
-                style: TextStyle(
-                  color: AppColors.textMuted,
-                  fontSize: 11,
-                ),
+                style: TextStyle(color: AppColors.textMuted, fontSize: 11),
               ),
             ],
           ),

@@ -1,16 +1,40 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/citizen_report.dart';
 import '../../domain/usecases/submit_citizen_report_usecase.dart';
+import '../../domain/repositories/citizen_report_repository.dart';
 import '../../../../core/network/api_exception.dart';
+import '../../../../core/services/connectivity_service.dart';
 
 enum SubmitStatus { idle, loading, success, error }
 
-/// Estado de envío de reportes ciudadanos. Sigue el mismo patrón que
-/// CommunityProvider: el Provider invoca un usecase, no un repositorio.
+/// Estado de envío de reportes ciudadanos.
 class CitizenReportProvider extends ChangeNotifier {
-  final SubmitCitizenReportUsecase submitReport;
+  final SubmitCitizenReportUsecase submitReportUsecase;
+  final ConnectivityService connectivityService;
+  final CitizenReportRepository repository;
 
-  CitizenReportProvider({required this.submitReport});
+  bool _isOffline = false;
+  bool get isOffline => _isOffline;
+
+  CitizenReportProvider({
+    required SubmitCitizenReportUsecase submitReport,
+    required this.connectivityService,
+    required this.repository,
+  }) : submitReportUsecase = submitReport {
+    _listenConnectivity();
+  }
+
+  void _listenConnectivity() {
+    connectivityService.startMonitoring();
+    connectivityService.onStatusChange.listen((isOnline) async {
+      _isOffline = !isOnline;
+      notifyListeners();
+
+      if (isOnline) {
+        await repository.syncPendingReports();
+      }
+    });
+  }
 
   SubmitStatus _status = SubmitStatus.idle;
   SubmitStatus get status => _status;
@@ -34,7 +58,7 @@ class CitizenReportProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final report = await submitReport(
+      final report = await submitReportUsecase(
         description: description,
         latitude: latitude,
         longitude: longitude,

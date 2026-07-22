@@ -50,7 +50,7 @@ class _FieldObservationFormScreenState
 
   Future<void> _captureGpsLocation() async {
     setState(() => _locatingGps = true);
-    
+
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -73,11 +73,9 @@ class _FieldObservationFormScreenState
       }
 
       final position = await Geolocator.getCurrentPosition(
-        locationSettings: LocationSettings(
-          accuracy: LocationAccuracy.high,
-        ),
+        locationSettings: LocationSettings(accuracy: LocationAccuracy.high),
       );
-      
+
       if (!mounted) return;
       setState(() {
         _latitude = position.latitude;
@@ -114,9 +112,9 @@ class _FieldObservationFormScreenState
   Future<void> _submit() async {
     if (_latitude == null || _longitude == null) return;
     if (_selectedZoneId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Selecciona una zona primero')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Selecciona una zona primero')));
       return;
     }
 
@@ -206,10 +204,7 @@ class _FieldObservationFormScreenState
                   items: provider.simpleZones.map((z) {
                     return DropdownMenuItem<String>(
                       value: z.id,
-                      child: Text(
-                        z.name,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      child: Text(z.name, overflow: TextOverflow.ellipsis),
                     );
                   }).toList(),
                   onChanged: (val) {
@@ -217,7 +212,10 @@ class _FieldObservationFormScreenState
                       _selectedZoneId = val;
                     });
                   },
-                  hint: Text('Selecciona una zona', style: TextStyle(color: AppColors.textMuted)),
+                  hint: Text(
+                    'Selecciona una zona',
+                    style: TextStyle(color: AppColors.textMuted),
+                  ),
                 ),
 
           SizedBox(height: 20),
@@ -228,7 +226,9 @@ class _FieldObservationFormScreenState
             decoration: BoxDecoration(
               color: AppColors.ash,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.12)),
+              border: Border.all(
+                color: AppColors.fireMid.withValues(alpha: 0.12),
+              ),
             ),
             child: Row(
               children: [
@@ -245,10 +245,7 @@ class _FieldObservationFormScreenState
                     _locatingGps
                         ? 'Obteniendo coordenadas GPS...'
                         : 'Ubicación capturada: ${_latitude!.toStringAsFixed(4)}, ${_longitude!.toStringAsFixed(4)}',
-                    style: TextStyle(
-                      color: AppColors.textDim,
-                      fontSize: 13,
-                    ),
+                    style: TextStyle(color: AppColors.textDim, fontSize: 13),
                   ),
                 ),
               ],
@@ -295,10 +292,7 @@ class _FieldObservationFormScreenState
             style: TextStyle(color: AppColors.white, fontSize: 14),
             decoration: InputDecoration(
               hintText: 'Describe lo que observas en el terreno...',
-              hintStyle: TextStyle(
-                color: AppColors.textMuted,
-                fontSize: 13,
-              ),
+              hintStyle: TextStyle(color: AppColors.textMuted, fontSize: 13),
               filled: true,
               fillColor: AppColors.ash,
               contentPadding: EdgeInsets.all(14),
@@ -310,10 +304,7 @@ class _FieldObservationFormScreenState
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(
-                  color: AppColors.fireMid,
-                  width: 1.4,
-                ),
+                borderSide: BorderSide(color: AppColors.fireMid, width: 1.4),
               ),
             ),
           ),
@@ -327,7 +318,9 @@ class _FieldObservationFormScreenState
                   : _submit,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.fireMid,
-                disabledBackgroundColor: AppColors.fireMid.withValues(alpha: 0.5),
+                disabledBackgroundColor: AppColors.fireMid.withValues(
+                  alpha: 0.5,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),

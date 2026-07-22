@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import '../../domain/entities/risk_zone.dart';
 import '../../domain/entities/field_observation.dart';
 import '../../domain/entities/push_alert.dart';
@@ -66,6 +67,56 @@ class BrigadistaProvider extends ChangeNotifier {
   bool _loadingInterventions = false;
   bool get loadingInterventions => _loadingInterventions;
 
+  // ----- Emergencias -----
+  bool _sendingEmergency = false;
+  bool get sendingEmergency => _sendingEmergency;
+
+  Future<bool> reportEmergency() async {
+    _sendingEmergency = true;
+    notifyListeners();
+
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        throw Exception('Los servicios de ubicación están deshabilitados.');
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          throw Exception('Permisos de ubicación denegados.');
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        throw Exception('Permisos de ubicación denegados permanentemente.');
+      }
+
+      Position position = await Geolocator.getCurrentPosition(
+        locationSettings: LocationSettings(accuracy: LocationAccuracy.high),
+      );
+
+      await repository.sendEmergency(position.latitude, position.longitude);
+      return true;
+    } catch (e) {
+      // Registrar error o propagarlo para la UI
+      return false;
+    } finally {
+      _sendingEmergency = false;
+      notifyListeners();
+    }
+  }
+
+  // ----- Intervención Activa -----
+  String? _activeInterventionZoneId;
+  String? get activeInterventionZoneId => _activeInterventionZoneId;
+  String? _activeInterventionZoneName;
+  String? get activeInterventionZoneName => _activeInterventionZoneName;
+
+  bool _closingIntervention = false;
+  bool get closingIntervention => _closingIntervention;
+
   void _listenConnectivity() {
     connectivityService.startMonitoring();
     connectivityService.onStatusChange.listen((isOnline) async {
@@ -85,12 +136,46 @@ class BrigadistaProvider extends ChangeNotifier {
       _alertHistory.insert(0, alert);
       notifyListeners();
     });
+
+    pushService.onInterventionAssigned.listen((data) {
+      _activeInterventionZoneId = data['zoneId'];
+      _activeInterventionZoneName = data['zoneName'];
+      notifyListeners();
+    });
   }
 
   Future<void> _refreshPendingCount() async {
     final pending = await repository.getPendingObservations();
     _pendingSyncCount = pending.length;
     notifyListeners();
+  }
+
+  Future<bool> closeActiveIntervention({
+    required String result,
+    required String notes,
+  }) async {
+    _closingIntervention = true;
+    notifyListeners();
+
+    try {
+      // Aquí iría el payload real hacia el backend, ej:
+      // final payload = {
+      //   "zonaId": _activeInterventionZoneId,
+      //   "resultado": result,
+      //   "observaciones": notes
+      // };
+      // await repository.submitInterventionResult(payload);
+
+      await Future.delayed(const Duration(seconds: 2));
+      _activeInterventionZoneId = null;
+      _activeInterventionZoneName = null;
+      return true;
+    } catch (_) {
+      return false;
+    } finally {
+      _closingIntervention = false;
+      notifyListeners();
+    }
   }
 
   // ---------------- HU01: Mapa de riesgo ----------------

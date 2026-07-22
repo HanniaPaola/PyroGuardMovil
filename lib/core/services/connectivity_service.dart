@@ -1,28 +1,25 @@
 import 'dart:async';
-import 'dart:io';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
-/// Servicio de conectividad simple, usado por HU05 para detectar
-/// recuperación de conexión y disparar sincronización automática.
+/// Servicio de conectividad mejorado usando internet_connection_checker_plus
+/// para detectar recuperación de conexión y disparar sincronización automática.
 class ConnectivityService {
-  Timer? _timer;
+  StreamSubscription<InternetStatus>? _subscription;
   bool _lastKnownStatus = true;
 
   final _statusController = StreamController<bool>.broadcast();
   Stream<bool> get onStatusChange => _statusController.stream;
 
   Future<bool> checkConnection() async {
-    try {
-      final result = await InternetAddress.lookup('example.com');
-      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
-    } on SocketException catch (_) {
-      return false;
-    }
+    return await InternetConnection().hasInternetAccess;
   }
 
-  void startMonitoring({Duration interval = const Duration(seconds: 10)}) {
-    _timer?.cancel();
-    _timer = Timer.periodic(interval, (_) async {
-      final isOnline = await checkConnection();
+  void startMonitoring() {
+    _subscription?.cancel();
+    _subscription = InternetConnection().onStatusChange.listen((
+      InternetStatus status,
+    ) {
+      final isOnline = status == InternetStatus.connected;
       if (isOnline != _lastKnownStatus) {
         _lastKnownStatus = isOnline;
         _statusController.add(isOnline);
@@ -31,7 +28,7 @@ class ConnectivityService {
   }
 
   void dispose() {
-    _timer?.cancel();
+    _subscription?.cancel();
     _statusController.close();
   }
 }

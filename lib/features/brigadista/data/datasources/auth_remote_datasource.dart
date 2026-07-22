@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/network/api_constants.dart';
 import '../models/auth_response_model.dart';
@@ -14,7 +15,8 @@ class AuthRemoteDataSource {
     required String email,
     required String password,
   }) async {
-    final response = await apiClient.postForm(ApiConstants.login, {
+    final loginUrl = dotenv.env['URL_LOGIN'] ?? ApiConstants.login;
+    final response = await apiClient.postForm(loginUrl, {
       // El backend espera 'username', aunque conceptualmente sea el correo.
       'username': email,
       'password': password,

@@ -58,7 +58,9 @@ class TechnicalDirectiveScreen extends StatelessWidget {
               color: AppColors.ash,
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: AppColors.riskColor(zone.riskLevel).withValues(alpha: 0.3),
+                color: AppColors.riskColor(
+                  zone.riskLevel,
+                ).withValues(alpha: 0.3),
               ),
             ),
             child: Column(
@@ -90,10 +92,7 @@ class TechnicalDirectiveScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 16),
                 Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 6,
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
                     color: AppColors.smoke,
                     borderRadius: BorderRadius.circular(8),
@@ -101,11 +100,7 @@ class TechnicalDirectiveScreen extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
-                        Icons.update,
-                        size: 13,
-                        color: AppColors.textMuted,
-                      ),
+                      Icon(Icons.update, size: 13, color: AppColors.textMuted),
                       SizedBox(width: 6),
                       Text(
                         'Última actualización: ${zone.lastUpdated.day.toString().padLeft(2, '0')}/'
@@ -129,7 +124,9 @@ class TechnicalDirectiveScreen extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.fireMid.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.25)),
+              border: Border.all(
+                color: AppColors.fireMid.withValues(alpha: 0.25),
+              ),
             ),
             child: Row(
               children: [

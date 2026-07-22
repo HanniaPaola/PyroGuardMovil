@@ -12,6 +12,8 @@ abstract class BrigadistaRepository {
   Future<List<RiskZone>> getRiskZones();
   Future<RiskZone> getZoneById(String zoneId);
 
+  Future<void> sendEmergency(double latitude, double longitude);
+
   Future<void> saveFieldObservation(FieldObservation observation);
   Future<List<FieldObservation>> getPendingObservations();
   Future<void> syncPendingObservations();

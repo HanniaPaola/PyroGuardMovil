@@ -30,7 +30,11 @@ class _CustomPolygonMapState extends State<CustomPolygonMap> {
     try {
       final responses = await Future.wait([
         http.get(Uri.parse('https://pyroguard.inode.cloud/ml/api/v1/zonas/')),
-        http.get(Uri.parse('https://pyroguard.inode.cloud/ml/api/v1/zonas/riesgo-publico')),
+        http.get(
+          Uri.parse(
+            'https://pyroguard.inode.cloud/ml/api/v1/zonas/riesgo-publico',
+          ),
+        ),
       ]);
 
       if (responses[0].statusCode == 200 && responses[1].statusCode == 200) {
@@ -52,7 +56,7 @@ class _CustomPolygonMapState extends State<CustomPolygonMap> {
 
           if (geojsonStr != null) {
             final geojson = json.decode(geojsonStr);
-            
+
             if (geojson['type'] == 'Polygon') {
               final coordinates = geojson['coordinates'][0] as List;
               parsedPolygons.add(_createPolygon(coordinates, name, risk));
@@ -123,27 +127,36 @@ class _CustomPolygonMapState extends State<CustomPolygonMap> {
     return SizedBox(
       height: widget.height,
       width: double.infinity,
-      child: _isLoading 
-          ? const SkeletonLoader(width: double.infinity, height: double.infinity, borderRadius: 0)
-          : _hasError 
-              ? Center(child: Text('Error cargando mapa', style: TextStyle(color: AppColors.textMuted)))
-              : FlutterMap(
-                  options: MapOptions(
-                    initialCenter: _polygons.isNotEmpty && _polygons.first.points.isNotEmpty 
-                        ? _polygons.first.points.first 
-                        : const LatLng(15.75, -92.73),
-                    initialZoom: 9.0,
-                  ),
-                  children: [
-                    TileLayer(
-                      urlTemplate: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-                      subdomains: const ['a', 'b', 'c', 'd'],
-                    ),
-                    PolygonLayer(
-                      polygons: _polygons,
-                    ),
-                  ],
+      child: _isLoading
+          ? const SkeletonLoader(
+              width: double.infinity,
+              height: double.infinity,
+              borderRadius: 0,
+            )
+          : _hasError
+          ? Center(
+              child: Text(
+                'Error cargando mapa',
+                style: TextStyle(color: AppColors.textMuted),
+              ),
+            )
+          : FlutterMap(
+              options: MapOptions(
+                initialCenter:
+                    _polygons.isNotEmpty && _polygons.first.points.isNotEmpty
+                    ? _polygons.first.points.first
+                    : const LatLng(15.75, -92.73),
+                initialZoom: 9.0,
+              ),
+              children: [
+                TileLayer(
+                  urlTemplate:
+                      'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+                  subdomains: const ['a', 'b', 'c', 'd'],
                 ),
+                PolygonLayer(polygons: _polygons),
+              ],
+            ),
     );
   }
 }

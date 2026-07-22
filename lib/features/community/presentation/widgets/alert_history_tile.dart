@@ -56,10 +56,7 @@ class AlertHistoryTile extends StatelessWidget {
                 SizedBox(height: 4),
                 Text(
                   durationText,
-                  style: TextStyle(
-                    color: AppColors.textDim,
-                    fontSize: 13,
-                  ),
+                  style: TextStyle(color: AppColors.textDim, fontSize: 13),
                 ),
                 if (alert.derivedToBrigade) ...[
                   const SizedBox(height: 4),

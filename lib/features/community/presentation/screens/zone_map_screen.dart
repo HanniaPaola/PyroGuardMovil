@@ -63,13 +63,17 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
             top: _showZones ? 100 : -MediaQuery.of(context).size.height,
             right: 16,
             bottom: isLandscape ? 16 : null,
-            height: isLandscape ? null : MediaQuery.of(context).size.height * 0.6,
+            height: isLandscape
+                ? null
+                : MediaQuery.of(context).size.height * 0.6,
             width: isLandscape ? 340 : screenWidth - 32,
             child: Container(
               decoration: BoxDecoration(
                 color: AppColors.smoke.withValues(alpha: 0.95),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.2)),
+                border: Border.all(
+                  color: AppColors.fireMid.withValues(alpha: 0.2),
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.5),
@@ -92,8 +96,6 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
     );
   }
 
-
-
   Widget _buildHeader() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
@@ -111,17 +113,17 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
           Spacer(),
           Text(
             'Toca una zona para detalles',
-            style: TextStyle(
-              color: AppColors.textMuted,
-              fontSize: 11,
-            ),
+            style: TextStyle(color: AppColors.textMuted, fontSize: 11),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildZonesList(CommunityProvider provider, ScrollController? scrollController) {
+  Widget _buildZonesList(
+    CommunityProvider provider,
+    ScrollController? scrollController,
+  ) {
     if (provider.loadingZones) {
       return const SkeletonList(itemCount: 4, isCard: true);
     }
@@ -135,10 +137,7 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
           onTap: () => _showZoneSheet(context, z),
           child: Container(
             margin: const EdgeInsets.only(bottom: 8),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               color: AppColors.ash,
               borderRadius: BorderRadius.circular(10),
@@ -258,5 +257,3 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
     );
   }
 }
-
-

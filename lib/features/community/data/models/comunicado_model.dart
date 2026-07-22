@@ -20,4 +20,15 @@ class ComunicadoModel extends Comunicado {
       expirationDate: DateTime.parse(json['fecha_vigencia'] as String),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id_comunicado': id,
+      'titulo': title,
+      'contenido': content,
+      'id_autor': authorId,
+      'fecha_publicacion': publishDate.toIso8601String(),
+      'fecha_vigencia': expirationDate.toIso8601String(),
+    };
+  }
 }

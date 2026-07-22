@@ -6,7 +6,7 @@ class AppColors {
   static const Color fireGlow = Color(0xFFFFB347);
   static const Color fireTip = Color(0xFFFFE566);
   static const Color ember = Color(0xFFFF4500);
-  
+
   static const Color smoke = Color(0xFF1A1008);
   static const Color ash = Color(0xFF2D1F0E);
   static const Color bark = Color(0xFF3D2B1A);

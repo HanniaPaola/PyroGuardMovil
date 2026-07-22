@@ -47,10 +47,7 @@ class ComunicadoTile extends StatelessWidget {
           SizedBox(height: 4),
           Text(
             comunicado.content,
-            style: TextStyle(
-              color: AppColors.textDim,
-              fontSize: 13,
-            ),
+            style: TextStyle(color: AppColors.textDim, fontSize: 13),
           ),
         ],
       ),
@@ -59,7 +56,18 @@ class ComunicadoTile extends StatelessWidget {
 
   String _formatDate(DateTime date) {
     const months = [
-      'ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic',
+      'ene',
+      'feb',
+      'mar',
+      'abr',
+      'may',
+      'jun',
+      'jul',
+      'ago',
+      'sep',
+      'oct',
+      'nov',
+      'dic',
     ];
     return '${date.day} ${months[date.month - 1]} ${date.year}';
   }

@@ -24,7 +24,9 @@ class CitizenReportTile extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  report.createdAt != null ? _formatDate(report.createdAt!) : '',
+                  report.createdAt != null
+                      ? _formatDate(report.createdAt!)
+                      : '',
                   style: TextStyle(
                     color: AppColors.textMuted,
                     fontSize: 11,
@@ -37,7 +39,11 @@ class CitizenReportTile extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: _getStatusColor(report.status).withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(6),
-                  border: Border.all(color: _getStatusColor(report.status).withValues(alpha: 0.3)),
+                  border: Border.all(
+                    color: _getStatusColor(
+                      report.status,
+                    ).withValues(alpha: 0.3),
+                  ),
                 ),
                 child: Text(
                   report.status?.toUpperCase() ?? 'PENDIENTE',
@@ -53,24 +59,21 @@ class CitizenReportTile extends StatelessWidget {
           SizedBox(height: 8),
           Text(
             report.description,
-            style: TextStyle(
-              color: AppColors.textDim,
-              fontSize: 13,
-            ),
+            style: TextStyle(color: AppColors.textDim, fontSize: 13),
           ),
           if (report.photoUrl != null) ...[
-             const SizedBox(height: 12),
-             ClipRRect(
-               borderRadius: BorderRadius.circular(8),
-               child: Image.network(
-                 report.photoUrl!,
-                 height: 120,
-                 width: double.infinity,
-                 fit: BoxFit.cover,
-                 errorBuilder: (context, error, stackTrace) => const SizedBox(),
-               ),
-             ),
-          ]
+            const SizedBox(height: 12),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.network(
+                report.photoUrl!,
+                height: 120,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => const SizedBox(),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -91,7 +94,18 @@ class CitizenReportTile extends StatelessWidget {
 
   String _formatDate(DateTime date) {
     const months = [
-      'ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic',
+      'ene',
+      'feb',
+      'mar',
+      'abr',
+      'may',
+      'jun',
+      'jul',
+      'ago',
+      'sep',
+      'oct',
+      'nov',
+      'dic',
     ];
     return '${date.day} ${months[date.month - 1]} ${date.year}';
   }

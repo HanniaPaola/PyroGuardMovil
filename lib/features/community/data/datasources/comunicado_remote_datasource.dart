@@ -9,6 +9,8 @@ class ComunicadoRemoteDataSource {
 
   Future<List<ComunicadoModel>> getComunicados() async {
     final response = await apiClient.getJsonList(ApiConstants.comunicados);
-    return response.map((e) => ComunicadoModel.fromJson(e as Map<String, dynamic>)).toList();
+    return response
+        .map((e) => ComunicadoModel.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 }

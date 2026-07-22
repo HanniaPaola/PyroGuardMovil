@@ -9,6 +9,7 @@ import '../../features/community/domain/usecases/submit_citizen_report_usecase.d
 import '../../features/community/domain/usecases/get_citizen_reports_usecase.dart';
 import '../../features/community/data/datasources/citizen_report_remote_datasource.dart';
 import '../../features/community/data/datasources/comunicado_remote_datasource.dart';
+import '../../features/community/data/datasources/community_local_datasource.dart';
 import '../../features/community/data/repositories/comunicado_repository_impl.dart';
 import '../../features/community/domain/repositories/comunicado_repository.dart';
 import '../../features/community/data/repositories/citizen_report_repository_impl.dart';
@@ -42,17 +43,30 @@ void init() {
 
   // Data sources
   sl.registerLazySingleton(() => ComunicadoRemoteDataSource(apiClient: sl()));
-  sl.registerLazySingleton(() => CitizenReportRemoteDataSource(apiClient: sl()));
+  sl.registerLazySingleton(
+    () => CitizenReportRemoteDataSource(apiClient: sl()),
+  );
+  sl.registerLazySingleton(() => CommunityLocalDataSource());
   sl.registerLazySingleton(() => BrigadistaRemoteDataSource(apiClient: sl()));
   sl.registerLazySingleton(() => BrigadistaLocalDataSource());
   sl.registerLazySingleton(() => AuthRemoteDataSource(apiClient: sl()));
 
   // Repositories
-  sl.registerLazySingleton<CommunityRepository>(() => CommunityRepositoryImpl());
-  sl.registerLazySingleton<ComunicadoRepository>(() => ComunicadoRepositoryImpl(remote: sl()));
-  sl.registerLazySingleton<CitizenReportRepository>(() => CitizenReportRepositoryImpl(remote: sl()));
-  sl.registerLazySingleton<BrigadistaRepository>(() => BrigadistaRepositoryImpl(remote: sl(), local: sl()));
-  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(remote: sl(), tokenStorage: sl()));
+  sl.registerLazySingleton<CommunityRepository>(
+    () => CommunityRepositoryImpl(localDataSource: sl()),
+  );
+  sl.registerLazySingleton<ComunicadoRepository>(
+    () => ComunicadoRepositoryImpl(remote: sl()),
+  );
+  sl.registerLazySingleton<CitizenReportRepository>(
+    () => CitizenReportRepositoryImpl(remote: sl(), localDataSource: sl()),
+  );
+  sl.registerLazySingleton<BrigadistaRepository>(
+    () => BrigadistaRepositoryImpl(remote: sl(), local: sl()),
+  );
+  sl.registerLazySingleton<AuthRepository>(
+    () => AuthRepositoryImpl(remote: sl(), tokenStorage: sl()),
+  );
 
   // Usecases
   sl.registerLazySingleton(() => GetNearbyZonesUsecase(sl()));
@@ -62,17 +76,27 @@ void init() {
   sl.registerLazySingleton(() => SubmitCitizenReportUsecase(sl()));
 
   // Providers
-  sl.registerFactory(() => CommunityProvider(
-        getNearbyZones: sl(),
-        getAlertHistory: sl(),
-        getWeatherConditions: sl(),
-        getComunicados: sl(),
-      ));
-  sl.registerFactory(() => CitizenReportProvider(submitReport: sl()));
-  sl.registerFactory(() => BrigadistaProvider(
-        repository: sl(),
-        connectivityService: sl(),
-        pushService: sl(),
-      ));
+  sl.registerFactory(
+    () => CommunityProvider(
+      getNearbyZones: sl(),
+      getAlertHistory: sl(),
+      getWeatherConditions: sl(),
+      getComunicados: sl(),
+    ),
+  );
+  sl.registerFactory(
+    () => CitizenReportProvider(
+      submitReport: sl(),
+      connectivityService: sl(),
+      repository: sl(),
+    ),
+  );
+  sl.registerFactory(
+    () => BrigadistaProvider(
+      repository: sl(),
+      connectivityService: sl(),
+      pushService: sl(),
+    ),
+  );
   sl.registerFactory(() => AuthProvider(repository: sl()));
 }

@@ -10,9 +10,11 @@ import '../widgets/risk_zone_map_marker.dart';
 import 'risk_map_screen.dart';
 import 'alert_history_screen.dart';
 import 'field_observation_form_screen.dart';
+import 'close_intervention_form_screen.dart';
 import 'zone_profile_screen.dart';
 import 'technical_directive_screen.dart';
-
+import 'brigadista_login_screen.dart';
+import '../providers/auth_provider.dart';
 
 /// Home del módulo Brigadista. Punto central tras el login, con acceso
 /// rápido a mapa de riesgo, formulario de campo e historial de alertas.
@@ -36,6 +38,7 @@ class _BrigadistaHomeScreenState extends State<BrigadistaHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<BrigadistaProvider>();
     final screens = [
       _BrigadistaHomeTab(),
       RiskMapScreen(),
@@ -46,21 +49,41 @@ class _BrigadistaHomeScreenState extends State<BrigadistaHomeScreen> {
       backgroundColor: AppColors.smoke,
       body: screens[_currentIndex],
       floatingActionButton: _currentIndex == 0
-          ? FloatingActionButton(
-              backgroundColor: AppColors.fireMid,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => FieldObservationFormScreen(),
-                  ),
-                );
-              },
-              child: Icon(
-                Icons.note_add_outlined,
-                color: AppColors.white,
-              ),
-            )
+          ? (provider.activeInterventionZoneId != null
+                ? FloatingActionButton.extended(
+                    backgroundColor: AppColors.fireGlow,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const CloseInterventionFormScreen(),
+                        ),
+                      );
+                    },
+                    label: Text(
+                      'CERRAR INTERVENCIÓN',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    icon: Icon(Icons.fact_check, color: Colors.white),
+                  )
+                : FloatingActionButton(
+                    backgroundColor: AppColors.fireMid,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => FieldObservationFormScreen(),
+                        ),
+                      );
+                    },
+                    child: Icon(
+                      Icons.note_add_outlined,
+                      color: AppColors.white,
+                    ),
+                  ))
           : null,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -131,6 +154,12 @@ class _BrigadistaHomeTab extends StatelessWidget {
               ),
 
               OfflineBadge(isOffline: provider.isOffline),
+              SizedBox(width: 8),
+              IconButton(
+                icon: Icon(Icons.logout, color: AppColors.textMuted),
+                tooltip: 'Cerrar sesión',
+                onPressed: () => _confirmLogout(context),
+              ),
             ],
           ),
           SizedBox(height: 20),
@@ -139,6 +168,110 @@ class _BrigadistaHomeTab extends StatelessWidget {
             isOffline: provider.isOffline,
             pendingCount: provider.pendingSyncCount,
           ),
+          SizedBox(height: 16),
+
+          if (provider.activeInterventionZoneId != null) ...[
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.fireMid.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.fireMid),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.warning_amber_rounded,
+                    color: AppColors.fireGlow,
+                    size: 28,
+                  ),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'INTERVENCIÓN ACTIVA',
+                          style: TextStyle(
+                            color: AppColors.fireGlow,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            letterSpacing: 1.1,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'Zona: ${provider.activeInterventionZoneName ?? provider.activeInterventionZoneId}',
+                          style: TextStyle(
+                            color: AppColors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 16),
+          ],
+
+          // Botón SOS de Emergencia
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red.shade700,
+              foregroundColor: Colors.white,
+              padding: EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 4,
+            ),
+            icon: provider.sendingEmergency
+                ? SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                : Icon(Icons.emergency, size: 28),
+            label: Text(
+              provider.sendingEmergency ? 'Enviando...' : 'EMERGENCIA SOS',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.5,
+              ),
+            ),
+            onPressed: provider.sendingEmergency || provider.isOffline
+                ? null
+                : () async {
+                    final success = await provider.reportEmergency();
+                    if (!context.mounted) return;
+                    if (success) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Ubicación de emergencia enviada exitosamente.',
+                          ),
+                          backgroundColor: Colors.green.shade700,
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Error al enviar la emergencia. Intenta de nuevo o usa radio.',
+                          ),
+                          backgroundColor: Colors.red.shade900,
+                        ),
+                      );
+                    }
+                  },
+          ),
+          SizedBox(height: 24),
 
           SectionHeader(
             tag: 'Zonas prioritarias',
@@ -225,9 +358,7 @@ class _BrigadistaHomeTab extends StatelessWidget {
                   label: 'Historial de alertas',
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => AlertHistoryScreen(),
-                    ),
+                    MaterialPageRoute(builder: (_) => AlertHistoryScreen()),
                   ),
                 ),
               ),
@@ -253,6 +384,46 @@ class _BrigadistaHomeTab extends StatelessWidget {
             ],
           ),
           SizedBox(height: 24),
+        ],
+      ),
+    );
+  }
+
+  void _confirmLogout(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.ash,
+        title: Text('Cerrar sesión', style: TextStyle(color: AppColors.white)),
+        content: Text(
+          '¿Estás seguro de que deseas cerrar tu sesión como brigadista?',
+          style: TextStyle(color: AppColors.textMuted),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(
+              'Cancelar',
+              style: TextStyle(color: AppColors.textMuted),
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.fireGlow,
+            ),
+            onPressed: () async {
+              Navigator.pop(ctx);
+              await context.read<AuthProvider>().logout();
+              if (context.mounted) {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => BrigadistaLoginScreen()),
+                  (route) => false,
+                );
+              }
+            },
+            child: Text('Salir', style: TextStyle(color: AppColors.white)),
+          ),
         ],
       ),
     );

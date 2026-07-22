@@ -10,4 +10,7 @@ abstract class CitizenReportRepository {
     required double longitude,
     String? photoUrl,
   });
+
+  /// Sincroniza los reportes pendientes almacenados localmente.
+  Future<void> syncPendingReports();
 }

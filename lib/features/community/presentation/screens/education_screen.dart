@@ -184,7 +184,8 @@ class _AnimatedCategoryTitle extends StatefulWidget {
   State<_AnimatedCategoryTitle> createState() => _AnimatedCategoryTitleState();
 }
 
-class _AnimatedCategoryTitleState extends State<_AnimatedCategoryTitle> with SingleTickerProviderStateMixin {
+class _AnimatedCategoryTitleState extends State<_AnimatedCategoryTitle>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
@@ -196,12 +197,14 @@ class _AnimatedCategoryTitleState extends State<_AnimatedCategoryTitle> with Sin
       vsync: this,
       duration: Duration(milliseconds: 500),
     );
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
-    _slideAnimation = Tween<Offset>(begin: Offset(-0.1, 0), end: Offset.zero).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+    _slideAnimation = Tween<Offset>(
+      begin: Offset(-0.1, 0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
     Future.delayed(Duration(milliseconds: 100 * widget.index), () {
       if (mounted) _controller.forward();
@@ -225,7 +228,9 @@ class _AnimatedCategoryTitleState extends State<_AnimatedCategoryTitle> with Sin
           decoration: BoxDecoration(
             color: AppColors.fireMid.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
-            border: Border(left: BorderSide(color: AppColors.fireMid, width: 4)),
+            border: Border(
+              left: BorderSide(color: AppColors.fireMid, width: 4),
+            ),
           ),
           child: Text(
             widget.text,

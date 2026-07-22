@@ -9,8 +9,11 @@ import 'features/community/presentation/providers/citizen_report_provider.dart';
 import 'features/brigadista/presentation/providers/brigadista_provider.dart';
 import 'features/brigadista/presentation/providers/auth_provider.dart';
 
-void main() {
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   di.init();
   runApp(const PyroGuardApp());
 }

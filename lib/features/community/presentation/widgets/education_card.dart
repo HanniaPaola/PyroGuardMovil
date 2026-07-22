@@ -21,7 +21,8 @@ class EducationCard extends StatefulWidget {
   State<EducationCard> createState() => _EducationCardState();
 }
 
-class _EducationCardState extends State<EducationCard> with SingleTickerProviderStateMixin {
+class _EducationCardState extends State<EducationCard>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
@@ -33,12 +34,14 @@ class _EducationCardState extends State<EducationCard> with SingleTickerProvider
       vsync: this,
       duration: const Duration(milliseconds: 600),
     );
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
-    _slideAnimation = Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.2),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
     Future.delayed(Duration(milliseconds: 100 * widget.index), () {
       if (mounted) _controller.forward();
@@ -65,12 +68,18 @@ class _EducationCardState extends State<EducationCard> with SingleTickerProvider
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: (widget.accentColor ?? AppColors.fireMid).withValues(alpha: 0.08),
+                color: (widget.accentColor ?? AppColors.fireMid).withValues(
+                  alpha: 0.08,
+                ),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
             ],
-            border: Border.all(color: (widget.accentColor ?? AppColors.fireMid).withValues(alpha: 0.3)),
+            border: Border.all(
+              color: (widget.accentColor ?? AppColors.fireMid).withValues(
+                alpha: 0.3,
+              ),
+            ),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,17 +90,28 @@ class _EducationCardState extends State<EducationCard> with SingleTickerProvider
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      (widget.accentColor ?? AppColors.fireMid).withValues(alpha: 0.2),
-                      (widget.accentColor ?? AppColors.fireMid).withValues(alpha: 0.05),
+                      (widget.accentColor ?? AppColors.fireMid).withValues(
+                        alpha: 0.2,
+                      ),
+                      (widget.accentColor ?? AppColors.fireMid).withValues(
+                        alpha: 0.05,
+                      ),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: (widget.accentColor ?? AppColors.fireMid).withValues(alpha: 0.4)),
+                  border: Border.all(
+                    color: (widget.accentColor ?? AppColors.fireMid).withValues(
+                      alpha: 0.4,
+                    ),
+                  ),
                 ),
                 child: Center(
-                  child: Text(widget.icon, style: const TextStyle(fontSize: 24)),
+                  child: Text(
+                    widget.icon,
+                    style: const TextStyle(fontSize: 24),
+                  ),
                 ),
               ),
               const SizedBox(width: 16),

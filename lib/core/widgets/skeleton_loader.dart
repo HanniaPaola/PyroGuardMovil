@@ -36,7 +36,7 @@ class SkeletonLoader extends StatelessWidget {
 
 class SkeletonCard extends StatelessWidget {
   final double height;
-  
+
   const SkeletonCard({super.key, this.height = 120});
 
   @override

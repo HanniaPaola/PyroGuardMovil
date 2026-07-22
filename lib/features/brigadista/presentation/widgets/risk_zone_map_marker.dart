@@ -55,10 +55,7 @@ class RiskZoneMapMarker extends StatelessWidget {
                   SizedBox(height: 2),
                   Text(
                     zone.municipality,
-                    style: TextStyle(
-                      color: AppColors.textMuted,
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: AppColors.textMuted, fontSize: 12),
                   ),
                   ZoneWeatherWidget(zoneId: zone.id),
                 ],

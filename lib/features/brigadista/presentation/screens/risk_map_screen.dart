@@ -112,13 +112,17 @@ class _RiskMapScreenState extends State<RiskMapScreen> {
             top: _showZones ? 100 : -MediaQuery.of(context).size.height,
             right: 16,
             bottom: isLandscape ? 16 : null,
-            height: isLandscape ? null : MediaQuery.of(context).size.height * 0.6,
+            height: isLandscape
+                ? null
+                : MediaQuery.of(context).size.height * 0.6,
             width: isLandscape ? 340 : screenWidth - 32,
             child: Container(
               decoration: BoxDecoration(
                 color: AppColors.smoke.withValues(alpha: 0.95),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.fireMid.withValues(alpha: 0.2)),
+                border: Border.all(
+                  color: AppColors.fireMid.withValues(alpha: 0.2),
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.5),
@@ -158,17 +162,17 @@ class _RiskMapScreenState extends State<RiskMapScreen> {
           Spacer(),
           Text(
             '${provider.zones.length} zonas',
-            style: TextStyle(
-              color: AppColors.textMuted,
-              fontSize: 11,
-            ),
+            style: TextStyle(color: AppColors.textMuted, fontSize: 11),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildZonesList(BrigadistaProvider provider, ScrollController? scrollController) {
+  Widget _buildZonesList(
+    BrigadistaProvider provider,
+    ScrollController? scrollController,
+  ) {
     if (provider.loadingZones) {
       return const SkeletonList(itemCount: 4, isCard: true);
     }
@@ -191,5 +195,3 @@ class _RiskMapScreenState extends State<RiskMapScreen> {
     );
   }
 }
-
-

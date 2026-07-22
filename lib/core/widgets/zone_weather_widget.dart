@@ -25,7 +25,8 @@ class _ZoneWeatherWidgetState extends State<ZoneWeatherWidget> {
 
   Future<void> _fetchWeather() async {
     try {
-      final url = 'https://pyroguard.inode.cloud/ml/api/v1/zonas/${widget.zoneId}/clima';
+      final url =
+          'https://pyroguard.inode.cloud/ml/api/v1/zonas/${widget.zoneId}/clima';
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         if (mounted) {
@@ -58,7 +59,10 @@ class _ZoneWeatherWidgetState extends State<ZoneWeatherWidget> {
     if (_error != null || _weatherData == null) {
       return Padding(
         padding: EdgeInsets.only(top: 4.0),
-        child: Text(_error ?? '', style: TextStyle(color: AppColors.textMuted, fontSize: 11)),
+        child: Text(
+          _error ?? '',
+          style: TextStyle(color: AppColors.textMuted, fontSize: 11),
+        ),
       );
     }
 
@@ -78,7 +82,10 @@ class _ZoneWeatherWidgetState extends State<ZoneWeatherWidget> {
             children: [
               Icon(Icons.thermostat, size: 12, color: AppColors.fireGlow),
               SizedBox(width: 2),
-              Text(temp.toString(), style: TextStyle(color: AppColors.cream, fontSize: 11)),
+              Text(
+                temp.toString(),
+                style: TextStyle(color: AppColors.cream, fontSize: 11),
+              ),
             ],
           ),
           Row(
@@ -86,7 +93,10 @@ class _ZoneWeatherWidgetState extends State<ZoneWeatherWidget> {
             children: [
               Icon(Icons.water_drop, size: 12, color: Colors.blueAccent),
               SizedBox(width: 2),
-              Text(hum.toString(), style: TextStyle(color: AppColors.cream, fontSize: 11)),
+              Text(
+                hum.toString(),
+                style: TextStyle(color: AppColors.cream, fontSize: 11),
+              ),
             ],
           ),
           Row(
@@ -94,7 +104,10 @@ class _ZoneWeatherWidgetState extends State<ZoneWeatherWidget> {
             children: [
               Icon(Icons.air, size: 12, color: Colors.white70),
               SizedBox(width: 2),
-              Text(wind.toString(), style: TextStyle(color: AppColors.cream, fontSize: 11)),
+              Text(
+                wind.toString(),
+                style: TextStyle(color: AppColors.cream, fontSize: 11),
+              ),
             ],
           ),
         ],

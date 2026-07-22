@@ -28,7 +28,12 @@ class _AlertHistoryScreenState extends State<AlertHistoryScreen> {
     final history = provider.comunicados;
 
     final totalAlerts = history.length;
-    final recientes = history.where((c) => c.publishDate.isAfter(DateTime.now().subtract(Duration(days: 7)))).length;
+    final recientes = history
+        .where(
+          (c) =>
+              c.publishDate.isAfter(DateTime.now().subtract(Duration(days: 7))),
+        )
+        .length;
 
     return Scaffold(
       backgroundColor: AppColors.smoke,
@@ -62,11 +67,7 @@ class _AlertHistoryScreenState extends State<AlertHistoryScreen> {
                   icon: '🔔',
                 ),
                 SizedBox(width: 12),
-                _StatCard(
-                  value: '$recientes',
-                  label: 'Recientes',
-                  icon: '⚡',
-                ),
+                _StatCard(value: '$recientes', label: 'Recientes', icon: '⚡'),
               ],
             ),
             SizedBox(height: 24),

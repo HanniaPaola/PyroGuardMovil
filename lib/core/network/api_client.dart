@@ -15,7 +15,12 @@ class ApiClient {
   ApiClient({http.Client? httpClient})
     : _httpClient = httpClient ?? http.Client();
 
-  Uri _buildUri(String path) => Uri.parse('${ApiConstants.baseUrl}$path');
+  Uri _buildUri(String path) {
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return Uri.parse(path);
+    }
+    return Uri.parse('${ApiConstants.baseUrl}$path');
+  }
 
   /// POST con body application/x-www-form-urlencoded.
   /// Usado por endpoints tipo OAuth2PasswordRequestForm (ej. login).
@@ -64,10 +69,7 @@ class ApiClient {
   }
 
   /// GET que retorna una lista de JSON (Array).
-  Future<List<dynamic>> getJsonList(
-    String path, {
-    String? bearerToken,
-  }) async {
+  Future<List<dynamic>> getJsonList(String path, {String? bearerToken}) async {
     try {
       final response = await _httpClient.get(
         _buildUri(path),
@@ -107,7 +109,7 @@ class ApiClient {
       if (bearerToken != null) {
         request.headers['Authorization'] = 'Bearer $bearerToken';
       }
-      
+
       request.files.add(await http.MultipartFile.fromPath(fileField, filePath));
 
       final streamedResponse = await _httpClient.send(request);

@@ -20,8 +20,9 @@ class BrigadistaRepositoryImpl implements BrigadistaRepository {
 
   Future<bool> get _isOnline async {
     try {
-      final result = await InternetAddress.lookup('google.com')
-          .timeout(const Duration(seconds: 3));
+      final result = await InternetAddress.lookup(
+        'google.com',
+      ).timeout(const Duration(seconds: 3));
       return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
     } catch (_) {
       return false;
@@ -51,6 +52,19 @@ class BrigadistaRepositoryImpl implements BrigadistaRepository {
   Future<RiskZone> getZoneById(String zoneId) async {
     final zones = await getRiskZones();
     return zones.firstWhere((z) => z.id == zoneId, orElse: () => zones.first);
+  }
+
+  @override
+  Future<void> sendEmergency(double latitude, double longitude) async {
+    if (await _isOnline) {
+      await remote.sendEmergency(latitude, longitude);
+    } else {
+      // Si no hay red, podríamos guardar la emergencia localmente si es requerido,
+      // pero usualmente un SOS necesita envío inmediato o reintento activo.
+      throw Exception(
+        'Sin conexión para enviar emergencia. Busca señal o llama por radio.',
+      );
+    }
   }
 
   @override

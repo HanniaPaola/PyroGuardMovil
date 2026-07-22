@@ -15,6 +15,5 @@ class AlertHistory {
     required this.derivedToBrigade,
   });
 
-  Duration? get duration =>
-      endDate?.difference(startDate);
+  Duration? get duration => endDate?.difference(startDate);
 }

@@ -45,10 +45,7 @@ class AlertPushTile extends StatelessWidget {
                   SizedBox(height: 4),
                   Text(
                     '${alert.distanceKm.toStringAsFixed(1)} km · ${_formatDate(alert.receivedAt)}',
-                    style: TextStyle(
-                      color: AppColors.textMuted,
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: AppColors.textMuted, fontSize: 12),
                   ),
                 ],
               ),

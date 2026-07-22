@@ -290,11 +290,15 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
       contentPadding: EdgeInsets.symmetric(vertical: 14),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: AppColors.textMuted.withValues(alpha: 0.15)),
+        borderSide: BorderSide(
+          color: AppColors.textMuted.withValues(alpha: 0.15),
+        ),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: AppColors.textMuted.withValues(alpha: 0.15)),
+        borderSide: BorderSide(
+          color: AppColors.textMuted.withValues(alpha: 0.15),
+        ),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),

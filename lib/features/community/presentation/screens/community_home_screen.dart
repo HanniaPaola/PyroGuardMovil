@@ -57,9 +57,7 @@ class _CommunityHomeScreenState extends State<CommunityHomeScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => CitizenReportFormScreen(),
-                  ),
+                  MaterialPageRoute(builder: (_) => CitizenReportFormScreen()),
                 );
               },
             )
@@ -269,10 +267,7 @@ class _HomeTab extends StatelessWidget {
                   Spacer(),
                   Text(
                     '${provider.zones.length} zonas',
-                    style: TextStyle(
-                      color: AppColors.textMuted,
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: AppColors.textMuted, fontSize: 12),
                   ),
                 ],
               ),
