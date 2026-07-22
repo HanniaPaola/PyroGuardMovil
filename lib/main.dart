@@ -11,11 +11,27 @@ import 'features/brigadista/presentation/providers/auth_provider.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import 'package:device_preview/device_preview.dart';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'firebase_options.dart';
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  debugPrint("Notificación en background: ${message.messageId}");
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   di.init();
-  runApp(const PyroGuardApp());
+  runApp(
+    DevicePreview(enabled: kIsWeb, builder: (context) => const PyroGuardApp()),
+  );
 }
 
 class PyroGuardApp extends StatelessWidget {
@@ -34,6 +50,8 @@ class PyroGuardApp extends StatelessWidget {
         title: 'PyroGuard AI',
         debugShowCheckedModeBanner: false,
         showPerformanceOverlay: kProfileMode,
+        locale: DevicePreview.locale(context),
+        builder: DevicePreview.appBuilder,
         theme: AppTheme.dark,
         home: const SplashScreen(),
       ),

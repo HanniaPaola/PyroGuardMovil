@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "7024684590",
+    "project_id": "pyroguard-d2b76",
+    "storage_bucket": "pyroguard-d2b76.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:7024684590:android:6e3cffd0324f2f4ccc39bf",
+        "android_client_info": {
+          "package_name": "com.pyroguard.pyro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2CSuf2XWyEDP8pFGGqi5Dt8xOP8F69zQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

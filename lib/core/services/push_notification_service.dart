@@ -1,10 +1,19 @@
 import 'dart:async';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/material.dart';
 import '../../features/brigadista/domain/entities/push_alert.dart';
+import '../network/api_client.dart';
 
 /// Servicio de notificaciones push geolocalizadas (HU02).
-/// Sustituir el cuerpo de los métodos por firebase_messaging /
-/// flutter_local_notifications según el proveedor que se integre.
 class PushNotificationService {
+  final ApiClient apiClient;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  final FlutterLocalNotificationsPlugin _localNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  PushNotificationService({required this.apiClient});
+
   final _alertController = StreamController<PushAlert>.broadcast();
   Stream<PushAlert> get onAlertReceived => _alertController.stream;
 
@@ -14,16 +23,88 @@ class PushNotificationService {
       _interventionController.stream;
 
   Future<void> initialize() async {
-    // Configurar canal de notificación con sonido/vibración distintiva
-    // y solicitar permisos de notificación + ubicación en segundo plano.
+    await _firebaseMessaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const initSettings = InitializationSettings(android: androidInit);
+    await _localNotificationsPlugin.initialize(settings: initSettings);
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      _handleMessage(message);
+      _showLocalNotification(message);
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      _handleMessage(message);
+    });
   }
 
-  /// Simula la recepción de una alerta push para fines de demo/desarrollo.
+  Future<void> registerToken(String userToken) async {
+    try {
+      String? fcmToken = await _firebaseMessaging.getToken();
+      if (fcmToken != null) {
+        await apiClient.postJson('/notificaciones/token', {
+          'fcm_token': fcmToken,
+        }, bearerToken: userToken);
+      }
+    } catch (e) {
+      debugPrint("Error registering FCM token: $e");
+    }
+  }
+
+  void _handleMessage(RemoteMessage message) {
+    final data = message.data;
+    final tipo = data['tipo'];
+
+    if (tipo == 'NUEVA_ALERTA' ||
+        tipo == 'ESTADO_EMERGENCIA' ||
+        tipo == 'AUMENTO_CRITICIDAD') {
+      final alert = PushAlert(
+        id: data['id'] ?? DateTime.now().millisecondsSinceEpoch.toString(),
+        zoneId: data['zoneId'] ?? 'unknown',
+        zoneName: data['zoneName'] ?? 'Zona General',
+        riskLevel: data['riskLevel'] ?? 'CRÍTICO',
+        distanceKm:
+            double.tryParse(data['distanceKm']?.toString() ?? '0') ?? 0.0,
+        receivedAt: DateTime.now(),
+      );
+      _alertController.add(alert);
+    } else if (tipo == 'ASIGNACION_INTERVENCION') {
+      _interventionController.add({
+        'zoneId': data['zoneId'] ?? '',
+        'zoneName': data['zoneName'] ?? 'Zona Desconocida',
+      });
+    }
+  }
+
+  void _showLocalNotification(RemoteMessage message) {
+    final notification = message.notification;
+    if (notification != null) {
+      _localNotificationsPlugin.show(
+        id: notification.hashCode,
+        title: notification.title,
+        body: notification.body,
+        notificationDetails: const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'canal_emergencias',
+            'Emergencias',
+            importance: Importance.max,
+            priority: Priority.high,
+            color: Color(0xFFFF6A00),
+          ),
+        ),
+      );
+    }
+  }
+
   void simulateIncomingAlert(PushAlert alert) {
     _alertController.add(alert);
   }
 
-  /// Simula la asignación de una intervención (ej. el backend despacha al brigadista)
   void simulateInterventionAssignment(String zoneId, String zoneName) {
     _interventionController.add({'zoneId': zoneId, 'zoneName': zoneName});
   }

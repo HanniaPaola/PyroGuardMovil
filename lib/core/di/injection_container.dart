@@ -38,7 +38,7 @@ void init() {
   // Core / Services
   sl.registerLazySingleton(() => ApiClient());
   sl.registerLazySingleton(() => ConnectivityService());
-  sl.registerLazySingleton(() => PushNotificationService());
+  sl.registerLazySingleton(() => PushNotificationService(apiClient: sl()));
   sl.registerLazySingleton(() => TokenStorageService());
 
   // Data sources
@@ -98,5 +98,7 @@ void init() {
       pushService: sl(),
     ),
   );
-  sl.registerFactory(() => AuthProvider(repository: sl()));
+  sl.registerFactory(
+    () => AuthProvider(repository: sl(), pushNotificationService: sl()),
+  );
 }
