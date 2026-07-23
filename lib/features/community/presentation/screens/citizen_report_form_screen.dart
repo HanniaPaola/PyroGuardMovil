@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
+import '../../../../core/utils/input_sanitizer.dart';
 
 /// Formulario público (sin autenticación) para que cualquier ciudadano
 /// reporte un foco de riesgo o incendio.
@@ -127,8 +128,13 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
       finalPhotoUrl = _pickedImage!.path;
     }
 
+    // 8. Sanitización de entrada (Limpieza, Filtrado, HTML Escaping)
+    final sanitizedDescription = InputSanitizer.sanitizeDescription(
+      _descriptionController.text,
+    );
+
     final success = await provider.submit(
-      description: _descriptionController.text.trim(),
+      description: sanitizedDescription,
       latitude: double.parse(_latitudeController.text),
       longitude: double.parse(_longitudeController.text),
       photoUrl: finalPhotoUrl,
@@ -263,6 +269,7 @@ class _CitizenReportFormScreenState extends State<CitizenReportFormScreen> {
                 TextFormField(
                   controller: _descriptionController,
                   maxLines: 5,
+                  maxLength: 500, // 1. Validación de Longitud
                   style: TextStyle(color: AppColors.white, fontSize: 14),
                   decoration: _inputDecoration(
                     hint:

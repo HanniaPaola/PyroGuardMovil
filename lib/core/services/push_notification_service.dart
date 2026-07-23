@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
@@ -43,16 +44,56 @@ class PushNotificationService {
     });
   }
 
+  StreamSubscription<String>? _tokenRefreshSub;
+
   Future<void> registerToken(String userToken) async {
     try {
       String? fcmToken = await _firebaseMessaging.getToken();
       if (fcmToken != null) {
-        await apiClient.postJson('/notificaciones/token', {
-          'fcm_token': fcmToken,
-        }, bearerToken: userToken);
+        await _sendTokenToBackend(fcmToken, userToken);
       }
+
+      _tokenRefreshSub?.cancel();
+      _tokenRefreshSub = _firebaseMessaging.onTokenRefresh.listen((newToken) {
+        _sendTokenToBackend(newToken, userToken);
+      });
     } catch (e) {
       debugPrint("Error registering FCM token: $e");
+    }
+  }
+
+  String _extractUserIdFromToken(String token) {
+    try {
+      final parts = token.split('.');
+      if (parts.length != 3) return '';
+      final payload = parts[1];
+      final normalized = base64Url.normalize(payload);
+      final resp = utf8.decode(base64Url.decode(normalized));
+      final payloadMap = json.decode(resp);
+      return payloadMap['sub']?.toString() ?? '';
+    } catch (e) {
+      return '';
+    }
+  }
+
+  Future<void> _sendTokenToBackend(String fcmToken, String userToken) async {
+    try {
+      final idUsuario = _extractUserIdFromToken(userToken);
+      await apiClient.postJson('/v1/notificaciones/token', {
+        'id_usuario': idUsuario,
+        'fcm_token': fcmToken,
+      }, bearerToken: userToken);
+    } catch (e) {
+      debugPrint("Error sending FCM token to backend: $e");
+    }
+  }
+
+  Future<void> deleteToken() async {
+    try {
+      await _firebaseMessaging.deleteToken();
+      _tokenRefreshSub?.cancel();
+    } catch (e) {
+      debugPrint("Error deleting FCM token: $e");
     }
   }
 

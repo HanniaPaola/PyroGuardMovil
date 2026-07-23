@@ -16,5 +16,5 @@ class ApiConstants {
   static const String uploadFile = '/v1/archivos/upload';
 
   // Comunicados de la comunidad
-  static const String comunicados = '/v1/comunicados/activos';
+  static const String comunicados = '/v1/comunicados';
 }

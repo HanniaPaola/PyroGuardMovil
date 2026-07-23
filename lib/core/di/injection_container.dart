@@ -99,6 +99,10 @@ void init() {
     ),
   );
   sl.registerFactory(
-    () => AuthProvider(repository: sl(), pushNotificationService: sl()),
+    () => AuthProvider(
+      repository: sl(),
+      pushNotificationService: sl(),
+      tokenStorage: sl(),
+    ),
   );
 }

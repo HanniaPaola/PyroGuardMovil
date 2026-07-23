@@ -15,10 +15,16 @@ class AuthRemoteDataSource {
     required String email,
     required String password,
   }) async {
-    final loginUrl = dotenv.env['URL_LOGIN'] ?? ApiConstants.login;
-    final response = await apiClient.postForm(loginUrl, {
-      // El backend espera 'username', aunque conceptualmente sea el correo.
-      'username': email,
+    String loginUrl = dotenv.env['URL_LOGIN'] ?? ApiConstants.login;
+    if (!loginUrl.endsWith('/login')) {
+      if (loginUrl.endsWith('/')) {
+        loginUrl += 'login';
+      } else {
+        loginUrl += '/login';
+      }
+    }
+    final response = await apiClient.postJson(loginUrl, {
+      'email': email,
       'password': password,
     });
 

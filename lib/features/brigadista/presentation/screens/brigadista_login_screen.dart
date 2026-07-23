@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/utils/input_sanitizer.dart';
 import '../providers/auth_provider.dart';
 import 'brigadista_home_screen.dart';
 
@@ -32,9 +33,13 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
 
     final authProvider = context.read<AuthProvider>();
 
+    // 8. Sanitización de entrada (Limpieza)
+    final sanitizedEmail = InputSanitizer.cleanString(_emailController.text);
+
     final success = await authProvider.login(
-      email: _emailController.text.trim(),
-      password: _passwordController.text,
+      email: sanitizedEmail,
+      password: _passwordController
+          .text, // La contraseña no se sanitiza igual para no alterar hashes, pero se valida su formato en el TextFormField.
     );
 
     if (!mounted) return;
@@ -163,6 +168,14 @@ class _BrigadistaLoginScreenState extends State<BrigadistaLoginScreen> {
                     validator: (v) {
                       if (v == null || v.isEmpty) {
                         return 'Ingresa tu contraseña';
+                      }
+                      // 5. Validación de patrones y reglas específicas
+                      if (v.length < 6) {
+                        return 'La contraseña debe tener al menos 6 caracteres';
+                      }
+                      if (!v.contains(RegExp(r'[a-zA-Z]')) ||
+                          !v.contains(RegExp(r'[0-9]'))) {
+                        return 'Debe contener letras y números';
                       }
                       return null;
                     },

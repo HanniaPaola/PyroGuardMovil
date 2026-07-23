@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/services/push_notification_service.dart';
+import '../../../../core/services/token_storage_service.dart';
 
 enum AuthStatus { idle, loading, authenticated, error }
 
@@ -11,11 +12,25 @@ enum AuthStatus { idle, loading, authenticated, error }
 class AuthProvider extends ChangeNotifier {
   final AuthRepository repository;
   final PushNotificationService pushNotificationService;
+  final TokenStorageService tokenStorage;
 
   AuthProvider({
     required this.repository,
     required this.pushNotificationService,
+    required this.tokenStorage,
   });
+
+  Future<void> checkSession() async {
+    final hasSession = await repository.hasActiveSession();
+    if (hasSession) {
+      _status = AuthStatus.authenticated;
+      notifyListeners();
+      final token = await tokenStorage.getAccessToken();
+      if (token != null) {
+        await pushNotificationService.registerToken(token);
+      }
+    }
+  }
 
   AuthStatus _status = AuthStatus.idle;
   AuthStatus get status => _status;
@@ -50,6 +65,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> logout() async {
+    await pushNotificationService.deleteToken();
     await repository.logout();
     _status = AuthStatus.idle;
     notifyListeners();

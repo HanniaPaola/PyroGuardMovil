@@ -17,6 +17,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'firebase_options.dart';
 
+import 'core/services/push_notification_service.dart';
+
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -29,6 +31,8 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   di.init();
+  await di.sl<PushNotificationService>().initialize();
+
   runApp(
     DevicePreview(enabled: kIsWeb, builder: (context) => const PyroGuardApp()),
   );
@@ -44,7 +48,9 @@ class PyroGuardApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => di.sl<CommunityProvider>()),
         ChangeNotifierProvider(create: (_) => di.sl<CitizenReportProvider>()),
         ChangeNotifierProvider(create: (_) => di.sl<BrigadistaProvider>()),
-        ChangeNotifierProvider(create: (_) => di.sl<AuthProvider>()),
+        ChangeNotifierProvider(
+          create: (_) => di.sl<AuthProvider>()..checkSession(),
+        ),
       ],
       child: MaterialApp(
         title: 'PyroGuard AI',

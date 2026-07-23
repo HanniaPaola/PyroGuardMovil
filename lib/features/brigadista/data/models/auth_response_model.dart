@@ -13,7 +13,7 @@ class AuthResponseModel extends AuthSession {
     return AuthResponseModel(
       accessToken: json['access_token'] as String,
       tokenType: json['token_type'] as String,
-      role: json['usuario']?['rol'] as String? ?? '',
+      role: json['rol'] as String? ?? json['usuario']?['rol'] as String? ?? '',
     );
   }
 }
