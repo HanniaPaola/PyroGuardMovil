@@ -6,6 +6,8 @@ import '../models/risk_zone_model.dart';
 import '../../domain/entities/simple_zone.dart';
 import '../../../../core/services/token_storage_service.dart';
 import '../../../../core/network/api_client.dart';
+import '../../../../core/network/api_constants.dart';
+import '../models/active_intervention_model.dart';
 
 /// Fuente remota simulada. Reemplazar las implementaciones con llamadas
 /// reales (Dio/http) al backend central cuando esté disponible.
@@ -172,5 +174,28 @@ class BrigadistaRemoteDataSource {
     final token = await TokenStorageService().getAccessToken();
     await apiClient.postJson('/v1/emergencias/', payload, bearerToken: token);
     */
+  }
+
+  Future<List<ActiveInterventionModel>> fetchActiveInterventions() async {
+    final token = await TokenStorageService().getAccessToken();
+    final response = await apiClient.getJsonList(
+      ApiConstants.activeInterventions,
+      bearerToken: token,
+    );
+    return response.map((e) => ActiveInterventionModel.fromJson(e)).toList();
+  }
+
+  Future<void> closeIntervention(
+    String idIntervencion,
+    String estado,
+    String observaciones,
+  ) async {
+    final token = await TokenStorageService().getAccessToken();
+    final payload = {"estado": estado, "observaciones": observaciones};
+    await apiClient.putJson(
+      '${ApiConstants.closeIntervention}$idIntervencion',
+      payload,
+      bearerToken: token,
+    );
   }
 }

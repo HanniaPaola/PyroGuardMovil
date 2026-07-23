@@ -9,8 +9,17 @@ class ApiConstants {
   // Auth (brigadista)
   static const String login = '/v1/auth/login';
 
-  // Ciudadano (community) — endpoints públicos, sin autenticación
-  static const String citizenReports = '/v1/ciudadano/reportes';
+  // Reportes ciudadanos (público)
+  static const String citizenReports = '/v1/reportes';
+
+  // FCM Token
+  static const String registerToken = '/v1/notificaciones/token';
+  static const String deleteToken = '/v1/notificaciones/token';
+
+  // Intervenciones
+  static const String activeInterventions =
+      '/v1/intervenciones/mis-tareas/activas';
+  static const String closeIntervention = '/v1/intervenciones/'; // Append ID
 
   // Subida de archivos
   static const String uploadFile = '/v1/archivos/upload';

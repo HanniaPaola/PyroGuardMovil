@@ -109,6 +109,7 @@ class BrigadistaProvider extends ChangeNotifier {
   }
 
   // ----- Intervención Activa -----
+  String? _activeInterventionId;
   String? _activeInterventionZoneId;
   String? get activeInterventionZoneId => _activeInterventionZoneId;
   String? _activeInterventionZoneName;
@@ -126,6 +127,7 @@ class BrigadistaProvider extends ChangeNotifier {
       if (isOnline) {
         await repository.syncPendingObservations();
         await _refreshPendingCount();
+        await fetchActiveIntervention();
       }
     });
   }
@@ -138,10 +140,28 @@ class BrigadistaProvider extends ChangeNotifier {
     });
 
     pushService.onInterventionAssigned.listen((data) {
+      _activeInterventionId = data['interventionId'];
       _activeInterventionZoneId = data['zoneId'];
       _activeInterventionZoneName = data['zoneName'];
       notifyListeners();
     });
+  }
+
+  Future<void> fetchActiveIntervention() async {
+    try {
+      final active = await repository.fetchActiveInterventions();
+      if (active.isNotEmpty) {
+        // Tomamos la primera intervención activa de la lista
+        final intervention = active.first;
+        _activeInterventionId = intervention.idIntervencion;
+        _activeInterventionZoneId = intervention.idZona;
+        _activeInterventionZoneName =
+            'Zona asignada (ID: ${intervention.idZona})';
+        notifyListeners();
+      }
+    } catch (e) {
+      // Silencioso
+    }
   }
 
   Future<void> _refreshPendingCount() async {
@@ -154,19 +174,15 @@ class BrigadistaProvider extends ChangeNotifier {
     required String result,
     required String notes,
   }) async {
+    if (_activeInterventionId == null) return false;
+
     _closingIntervention = true;
     notifyListeners();
 
     try {
-      // Aquí iría el payload real hacia el backend, ej:
-      // final payload = {
-      //   "zonaId": _activeInterventionZoneId,
-      //   "resultado": result,
-      //   "observaciones": notes
-      // };
-      // await repository.submitInterventionResult(payload);
+      await repository.closeIntervention(_activeInterventionId!, result, notes);
 
-      await Future.delayed(const Duration(seconds: 2));
+      _activeInterventionId = null;
       _activeInterventionZoneId = null;
       _activeInterventionZoneName = null;
       return true;
@@ -186,6 +202,9 @@ class BrigadistaProvider extends ChangeNotifier {
     try {
       final isOnline = await connectivityService.checkConnection();
       _isOffline = !isOnline;
+      if (isOnline) {
+        await fetchActiveIntervention();
+      }
       _zones = await repository.getRiskZones();
     } finally {
       _loadingZones = false;

@@ -68,6 +68,30 @@ class ApiClient {
     }
   }
 
+  /// PUT con body application/json.
+  Future<Map<String, dynamic>> putJson(
+    String path,
+    Map<String, dynamic> body, {
+    String? bearerToken,
+  }) async {
+    try {
+      final response = await _httpClient.put(
+        _buildUri(path),
+        headers: {
+          'Content-Type': 'application/json',
+          if (bearerToken != null) 'Authorization': 'Bearer $bearerToken',
+        },
+        body: jsonEncode(body),
+      );
+
+      return await _handleResponse(response);
+    } on http.ClientException {
+      throw ApiException(
+        'No se pudo conectar al servidor. Verifica tu conexión.',
+      );
+    }
+  }
+
   /// GET que retorna una lista de JSON (Array).
   Future<List<dynamic>> getJsonList(String path, {String? bearerToken}) async {
     try {

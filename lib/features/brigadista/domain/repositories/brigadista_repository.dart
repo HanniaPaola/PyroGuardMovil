@@ -3,6 +3,7 @@ import '../entities/field_observation.dart';
 import '../entities/push_alert.dart';
 import '../entities/zone_intervention.dart';
 import '../entities/simple_zone.dart';
+import '../entities/active_intervention.dart';
 
 /// Contrato de dominio para el feature Brigadista.
 /// La capa de datos implementa esto combinando fuente remota y local
@@ -25,4 +26,11 @@ abstract class BrigadistaRepository {
 
   Future<void> cacheZonesForOffline(List<RiskZone> zones);
   Future<bool> hasOfflineCache();
+
+  Future<List<ActiveIntervention>> fetchActiveInterventions();
+  Future<void> closeIntervention(
+    String idIntervencion,
+    String estado,
+    String observaciones,
+  );
 }

@@ -35,9 +35,15 @@ class _CloseInterventionFormScreenState
     if (_formKey.currentState?.validate() ?? false) {
       final provider = context.read<BrigadistaProvider>();
 
+      // El backend solo acepta "Completada" en el estado final.
+      // Así que anexamos el resultado visual ("Extinguido", etc.) a las observaciones.
+      final String estadoBackend = 'Completada';
+      final String notasAnexadas =
+          '[${_selectedResult!}] ${_notesController.text.trim()}'.trim();
+
       final success = await provider.closeActiveIntervention(
-        result: _selectedResult!,
-        notes: _notesController.text.trim(),
+        result: estadoBackend,
+        notes: notasAnexadas,
       );
 
       if (!mounted) return;

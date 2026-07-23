@@ -4,6 +4,7 @@ import '../../domain/entities/risk_zone.dart';
 import '../../domain/entities/field_observation.dart';
 import '../../domain/entities/push_alert.dart';
 import '../../domain/entities/zone_intervention.dart';
+import '../../domain/entities/active_intervention.dart';
 import '../../domain/entities/simple_zone.dart';
 import '../../domain/repositories/brigadista_repository.dart';
 import '../datasources/brigadista_remote_datasource.dart';
@@ -142,5 +143,25 @@ class BrigadistaRepositoryImpl implements BrigadistaRepository {
   @override
   Future<bool> hasOfflineCache() async {
     return local.hasCachedZones();
+  }
+
+  @override
+  Future<List<ActiveIntervention>> fetchActiveInterventions() async {
+    if (!(await _isOnline)) {
+      return []; // Por ahora no manejamos intervenciones offline
+    }
+    return remote.fetchActiveInterventions();
+  }
+
+  @override
+  Future<void> closeIntervention(
+    String idIntervencion,
+    String estado,
+    String observaciones,
+  ) async {
+    if (!(await _isOnline)) {
+      throw Exception('Debe estar en línea para cerrar una intervención.');
+    }
+    await remote.closeIntervention(idIntervencion, estado, observaciones);
   }
 }
